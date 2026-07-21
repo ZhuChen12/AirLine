@@ -41,12 +41,13 @@ final class FlightEngine {
     // MARK: - 值机与开段
 
     func checkIn(origin: Airport, edge: RouteEdge, dest: Airport,
-                 carrierCode: String, segmentMinutes: Int,
+                 carrierCode: String, segmentMinutes: Int, relayMode: Bool,
                  profile: PlayerProfile, context: ModelContext) {
         let carrierName = AirportStore.shared.carrierNames[carrierCode] ?? carrierCode
         let journey = ActiveJourney(origin: origin, dest: dest, edge: edge,
                                     carrierCode: carrierCode, carrierName: carrierName,
                                     cabin: profile.cabin)
+        journey.relayMode = relayMode
         context.insert(journey)
         startSegment(journey, minutes: segmentMinutes)
         try? context.save()
@@ -241,7 +242,7 @@ final class FlightEngine {
         journey.segmentMinutes = 0
         journey.segmentProgressMinutes = 0
 
-        let isRelayJourney = TimeMapping.isRelayEligible(focusMinutes: journey.focusMinutes)
+        let isRelayJourney = journey.isRelayJourney
         let destIata = journey.destIata
         let destCity = AirportStore.shared[destIata]?.displayCity ?? destIata
         let remaining = isRelayJourney ? journey.remainingFocusMinutes : 0

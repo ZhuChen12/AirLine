@@ -159,6 +159,8 @@ final class ActiveJourney {
     var realMinutes: Int = 0
     /// 全程专注总时长（压缩映射结果）
     var focusMinutes: Int = 0
+    /// 本次旅程是否按接力模式值机。只有接力模式才会保留检查点。
+    var relayMode: Bool = false
     /// 已完成段累计（检查点）
     var completedFocusMinutes: Int = 0
     var creditedKm: Int = 0
@@ -187,6 +189,7 @@ final class ActiveJourney {
     }
 
     var cabin: CabinClass { CabinClass(rawValue: cabinRaw) ?? .economy }
+    var isRelayJourney: Bool { relayMode }
     var remainingFocusMinutes: Int { max(0, focusMinutes - completedFocusMinutes) }
     /// 检查点处的航线进度
     var checkpointFraction: Double {

@@ -12,8 +12,14 @@ struct RouteCandidate: Identifiable {
 
     var id: String { dest.icaoKey }
     var hubRouteCount: Int { dest.routes.count }
-    var relayEligible: Bool { TimeMapping.isRelayEligible(focusMinutes: focusMinutes) }
+    var relayCapable: Bool {
+        TimeMapping.isRelayCapable(
+            focusMinutes: focusMinutes,
+            routeKey: "\(edge.destIata)-\(edge.km)-\(edge.realMinutes)"
+        )
+    }
     func isLocked(for cabin: CabinClass) -> Bool { requiredCabin > cabin }
+    func isRelayLocked(for cabin: CabinClass) -> Bool { relayCapable && !cabin.relayUnlocked }
 }
 
 enum DurationFilter: String, CaseIterable, Identifiable {
@@ -30,7 +36,7 @@ enum DurationFilter: String, CaseIterable, Identifiable {
         case .short: return c.focusMinutes <= 30
         case .medium: return c.focusMinutes > 30 && c.focusMinutes <= 60
         case .long: return c.focusMinutes > 60
-        case .relay: return c.relayEligible
+        case .relay: return c.relayCapable
         }
     }
 }
@@ -203,7 +209,7 @@ struct RouteBoardView: View {
                     Task {
                         try? await Task.sleep(for: .milliseconds(700))
                         selected = directCandidates.first {
-                            $0.relayEligible && !$0.isLocked(for: profile.cabin)
+                            $0.relayCapable && !$0.isLocked(for: profile.cabin)
                         }
                     }
                 }
@@ -318,6 +324,7 @@ struct RouteCardRow: View {
     let cabin: CabinClass
 
     private var locked: Bool { candidate.isLocked(for: cabin) }
+    private var relayLocked: Bool { candidate.isRelayLocked(for: cabin) }
     private var accent: Color { Theme.cabinColor(candidate.requiredCabin) }
 
     var body: some View {
@@ -348,10 +355,10 @@ struct RouteCardRow: View {
                             .background(Theme.track.opacity(0.12), in: Capsule())
                             .foregroundStyle(Theme.track)
                     }
-                    if candidate.relayEligible {
+                    if candidate.relayCapable {
                         Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
                             .font(.system(size: 10))
-                            .foregroundStyle(Theme.track)
+                            .foregroundStyle(relayLocked ? Theme.textSecondary : Theme.track)
                     }
                 }
                 Text("\(candidate.dest.displayCountry) · \(candidate.edge.km) km · 航程 \(TimeMapping.formatMinutes(candidate.edge.realMinutes))")
@@ -366,6 +373,14 @@ struct RouteCardRow: View {
                         .font(.system(size: 9))
                         .foregroundStyle(Theme.textSecondary)
                 }
+            } else if relayLocked {
+                VStack(alignment: .trailing, spacing: 3) {
+                    Image(systemName: "lock.fill").foregroundStyle(Theme.textSecondary)
+                    Text("优选经济舱\n可接力")
+                        .font(.system(size: 9))
+                        .multilineTextAlignment(.trailing)
+                        .foregroundStyle(Theme.textSecondary)
+                }
             } else {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(TimeMapping.formatMinutes(candidate.focusMinutes))
@@ -377,7 +392,7 @@ struct RouteCardRow: View {
         }
         .padding(14)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
-        .opacity(locked ? 0.62 : 1)
+        .opacity(locked || relayLocked ? 0.62 : 1)
     }
 }
 
@@ -393,8 +408,8 @@ struct CheckInSheet: View {
     @State private var didOfferInitialSegmentPicker = false
 
     private var locked: Bool { candidate.isLocked(for: profile.cabin) }
-    private var relayAvailable: Bool { candidate.relayEligible && profile.cabin.relayUnlocked }
-    private var relayLockedByCabin: Bool { candidate.relayEligible && !profile.cabin.relayUnlocked }
+    private var relayAvailable: Bool { candidate.relayCapable && profile.cabin.relayUnlocked }
+    private var relayLockedByCabin: Bool { candidate.isRelayLocked(for: profile.cabin) }
 
     private var passPreview: BoardingPassData {
         let store = AirportStore.shared
@@ -448,7 +463,7 @@ struct CheckInSheet: View {
                     lockedBanner
                 } else {
                     if relayLockedByCabin {
-                        Text("本航线可一次坐完；累计 5,000 km 后可拆分为多段接力")
+                        Text("本航线可一次坐完；达到优选经济舱后可拆分为多段接力。")
                             .font(.footnote)
                             .foregroundStyle(Theme.textSecondary)
                     }
@@ -470,7 +485,7 @@ struct CheckInSheet: View {
                 remaining: candidate.focusMinutes,
                 actionTitle: "值机并起飞"
             ) { minutes in
-                checkIn(segmentMinutes: minutes)
+                checkIn(segmentMinutes: minutes, relayMode: true)
             }
             .presentationDetents([.medium])
             .presentationBackground(Theme.bgElevated)
@@ -499,7 +514,7 @@ struct CheckInSheet: View {
             if relayAvailable {
                 showInitialSegmentPicker = true
             } else {
-                checkIn(segmentMinutes: candidate.focusMinutes)
+                checkIn(segmentMinutes: candidate.focusMinutes, relayMode: false)
             }
         } label: {
             HStack {
@@ -518,7 +533,7 @@ struct CheckInSheet: View {
         }
     }
 
-    private func checkIn(segmentMinutes: Int) {
+    private func checkIn(segmentMinutes: Int, relayMode: Bool) {
         guard let origin = AirportStore.shared[profile.currentIata],
               let carrier = candidate.edge.carrierCodes.first else { return }
         FlightEngine.shared.checkIn(
@@ -527,6 +542,7 @@ struct CheckInSheet: View {
             dest: candidate.dest,
             carrierCode: carrier,
             segmentMinutes: segmentMinutes,
+            relayMode: relayMode,
             profile: profile,
             context: context
         )

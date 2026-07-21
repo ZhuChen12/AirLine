@@ -194,8 +194,6 @@ struct BoardingPassView: View {
 
     private func terminalBlock(code: String, city: String, time: Date, tz: TimeZone,
                                align: HorizontalAlignment) -> some View {
-        var fmt = Date.FormatStyle.dateTime.hour(.twoDigits(amPM: .omitted)).minute()
-        fmt.timeZone = tz
         return VStack(alignment: align, spacing: 3) {
             Text(code)
                 .font(.system(size: 32, weight: .black, design: .monospaced))
@@ -203,10 +201,20 @@ struct BoardingPassView: View {
             Text(city)
                 .font(.system(size: 11))
                 .foregroundStyle(Theme.textSecondary)
-            Text(time.formatted(fmt))
+            Text(formatClock(time, tz: tz))
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundStyle(accent)
+                .monospacedDigit()
+                .lineLimit(1)
         }
+    }
+
+    private func formatClock(_ date: Date, tz: TimeZone) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = tz
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
 
     private func field(_ label: String, _ value: String) -> some View {

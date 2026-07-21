@@ -13,9 +13,9 @@ enum CabinClass: Int, CaseIterable, Comparable, Codable {
     var thresholdKm: Int {
         switch self {
         case .economy: return 0
-        case .premium: return 5_000
-        case .business: return 20_000
-        case .first: return 50_000
+        case .premium: return 12_000
+        case .business: return 45_000
+        case .first: return 100_000
         }
     }
 

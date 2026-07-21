@@ -52,7 +52,7 @@ struct FocusFlightView: View {
             }
             Button("继续飞行", role: .cancel) {}
         } message: {
-            Text(TimeMapping.isRelayEligible(focusMinutes: journey.focusMinutes)
+            Text(journey.isRelayJourney
                  ? "当前段将作废，已完成的检查点会保留。"
                  : "本次飞行将作废，目的地不会点亮。")
         }
@@ -218,7 +218,7 @@ struct FocusFlightView: View {
             HStack {
                 Text("全程 \(journey.totalKm) km")
                 Spacer()
-                if TimeMapping.isRelayEligible(focusMinutes: journey.focusMinutes) {
+                if journey.isRelayJourney {
                     Text("接力旅程 · 检查点 \(TimeMapping.formatMinutes(journey.completedFocusMinutes))")
                 }
             }

@@ -102,16 +102,23 @@ enum DemoSeeder {
               (try? context.fetch(FetchDescriptor<ActiveJourney>()))?.first == nil else { return }
         let store = AirportStore.shared
         let o = profile.currentIata
+        let relayRoute = store.routes(from: o)
+            .filter {
+                TimeMapping.isRelayCapable(
+                    focusMinutes: TimeMapping.focusMinutes(forRealMinutes: $0.edge.realMinutes),
+                    routeKey: "\($0.edge.destIata)-\($0.edge.km)-\($0.edge.realMinutes)"
+                )
+            }
+            .max(by: { $0.edge.km < $1.edge.km })
         guard let origin = store[o],
-              let (edge, _) = store.routes(from: o)
-                .filter({ TimeMapping.isRelayEligible(focusMinutes: TimeMapping.focusMinutes(forRealMinutes: $0.edge.realMinutes)) })
-                .max(by: { $0.edge.km < $1.edge.km }),
+              let (edge, _) = relayRoute,
               let dest = store[edge.destIata] else { return }
         let carrier = edge.carrierCodes.first ?? "MU"
         let journey = ActiveJourney(origin: origin, dest: dest, edge: edge,
                                     carrierCode: carrier,
                                     carrierName: store.carrierNames[carrier] ?? carrier,
                                     cabin: profile.cabin)
+        journey.relayMode = true
         if ProcessInfo.processInfo.arguments.contains("--demo-final-relay") {
             journey.completedFocusMinutes = max(0, journey.focusMinutes - 5)
         } else {
