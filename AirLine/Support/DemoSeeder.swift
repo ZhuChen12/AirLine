@@ -129,6 +129,11 @@ enum DemoSeeder {
         if let journey = (try? context.fetch(FetchDescriptor<ActiveJourney>()))?.first {
             if landing { journey.completedFocusMinutes = journey.focusMinutes - 1 }
             FlightEngine.shared.startSegment(journey, minutes: segMinutes)
+            if landing {
+                journey.segmentStartAt = Date().addingTimeInterval(
+                    -TimeInterval(journey.segmentMinutes * 60 + 2)
+                )
+            }
         } else if let (edge, dest) = store.routes(from: profile.currentIata)
                     .min(by: { $0.edge.km < $1.edge.km }),
                   let origin = store[profile.currentIata] {
@@ -137,10 +142,15 @@ enum DemoSeeder {
                                         carrierCode: carrier,
                                         carrierName: store.carrierNames[carrier] ?? carrier,
                                         cabin: profile.cabin)
-            // --demo-landing: 只剩最后 1 分钟，落地后直接看点亮结算
+            // --demo-landing: 让末段快速到期，直接看点亮结算
             if landing { journey.completedFocusMinutes = journey.focusMinutes - 1 }
             context.insert(journey)
             FlightEngine.shared.startSegment(journey, minutes: segMinutes)
+            if landing {
+                journey.segmentStartAt = Date().addingTimeInterval(
+                    -TimeInterval(journey.segmentMinutes * 60 + 2)
+                )
+            }
         }
         try? context.save()
     }
