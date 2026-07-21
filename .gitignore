@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Xcode
+xcuserdata/
+DerivedData/
+*.xcuserstate
+build/
+
+# 数据管线中间产物（airline_routes.json 22MB 快照可随时重新下载）
+data/airline_routes.json
+tools/out/
+
+# 参考 skill 仓库（非本项目代码）
+skills-main/

@@ -1,0 +1,600 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0D1135A55A57AAD4CB2985ED /* AirLineWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DC6C69238C69E8DF0F949 /* AirLineWidgetBundle.swift */; };
+		18F979813893281F562690EA /* FlyHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0224C4C77ED312746F1680A5 /* FlyHomeView.swift */; };
+		19E0F1FB32597DBE4CBBAA78 /* Generators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC52771DABA85CF2CD39467 /* Generators.swift */; };
+		204A2BE4AB23D1711990686F /* MapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDF365E2189BA0EC46EC94B /* MapRenderer.swift */; };
+		211DCE7D3CECA3B53ED1B8DF /* world_land.min.json in Resources */ = {isa = PBXBuildFile; fileRef = 29786D4E6001A4D65E899002 /* world_land.min.json */; };
+		2937B5A790105C77086409F2 /* CabinClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D9D97BFA6E0FD654A81B9 /* CabinClass.swift */; };
+		2A9ADA708CA0122C4C4F76D4 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFA8E0B32DCCB2BB7B3A054 /* Models.swift */; };
+		2F9FCB1136B1C76B98145A1A /* CityBioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61291C33AFF80298BF3C6275 /* CityBioService.swift */; };
+		30AD15BC4D93D14E8D939F9C /* AirLineWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D260D2FF0EFCA60760B02D91 /* AirLineWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		36FB106D807A4D08FF99C8A5 /* FocusFlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8461D5583A5FB0EC7284651 /* FocusFlightView.swift */; };
+		4A4691B94A14527E9BBC0417 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D140A92E40F2132581E0CF4B /* OnboardingView.swift */; };
+		50E5563D377B36C10C69807C /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D0D84019C94C384E72E6D3 /* LandingView.swift */; };
+		682B8FEFD0A38E7CF970CAA8 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE072338BEACB70B27CDCD4 /* RootView.swift */; };
+		8139693391AA6E8058291946 /* AirLineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B964A8347163508295585165 /* AirLineApp.swift */; };
+		8B151A9039CD9AC5B06822EF /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78B27AF57BE8FDB0C1D1B89 /* MeView.swift */; };
+		97E9050CA7979579ECE7CCCC /* TimeMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9BBD3ECEF3084D55A38D5CE /* TimeMapping.swift */; };
+		9CDECB3CC7937E6EAFF65EF0 /* city_bios.json in Resources */ = {isa = PBXBuildFile; fileRef = C3D5E28D7512A78BBE5474E9 /* city_bios.json */; };
+		B1B6FFBEC30D523DCED5B0F3 /* GreatCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A8D89726C46C37A5A4C48 /* GreatCircle.swift */; };
+		B3CD192C3AF8AA4E8D5FFFBD /* FlightActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC96C1DA33DC3609143228E4 /* FlightActivityAttributes.swift */; };
+		B3E9A6F0C3BF59CFAF90B7FA /* FlightActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC96C1DA33DC3609143228E4 /* FlightActivityAttributes.swift */; };
+		BA09EAAB855E7879A8D9FB89 /* AirportStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7B84026157781B0CF19177 /* AirportStore.swift */; };
+		BCAC546A4F50578CD0A080E3 /* airports.min.json in Resources */ = {isa = PBXBuildFile; fileRef = 999C49F1FE1C8BCAFA5FE8E3 /* airports.min.json */; };
+		CF5E5DD46DB855A2459408FE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDF9AA1196D25F1E57CD33 /* Theme.swift */; };
+		D40D48AAD8A02CAD9A854577 /* FlightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AB978D8424F4564F1B54C6 /* FlightEngine.swift */; };
+		D4A930DC490A046AB013862D /* RouteBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADE2549CB0A945B1171FE5E /* RouteBoardView.swift */; };
+		E82CEF081391D35AE30620EE /* DemoSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6F879E5356A9CCA678F098 /* DemoSeeder.swift */; };
+		ED25C8E1741BD237A9D74584 /* BoardingPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F49E7E13937D284D78586FC /* BoardingPassView.swift */; };
+		F5E30EBBA94AD7444BEB7101 /* MapTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DA7F0B88A54DEE087A299E /* MapTabView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BE9EF3A635B9C51D0250188E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6948E0915ED9E622C058ACE5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EA8AA5C7A2A7ADF60E5F3938;
+			remoteInfo = AirLineWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		91F04B783BD271B7CEBA9E9D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				30AD15BC4D93D14E8D939F9C /* AirLineWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0224C4C77ED312746F1680A5 /* FlyHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyHomeView.swift; sourceTree = "<group>"; };
+		04AB978D8424F4564F1B54C6 /* FlightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightEngine.swift; sourceTree = "<group>"; };
+		07DA7F0B88A54DEE087A299E /* MapTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTabView.swift; sourceTree = "<group>"; };
+		0EDF365E2189BA0EC46EC94B /* MapRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRenderer.swift; sourceTree = "<group>"; };
+		130A3B94C09412DE108A69F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		29786D4E6001A4D65E899002 /* world_land.min.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = world_land.min.json; sourceTree = "<group>"; };
+		2F49E7E13937D284D78586FC /* BoardingPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardingPassView.swift; sourceTree = "<group>"; };
+		3EFA8E0B32DCCB2BB7B3A054 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		3F6F879E5356A9CCA678F098 /* DemoSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoSeeder.swift; sourceTree = "<group>"; };
+		4323B935FE2836CC6613DCF2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4CC52771DABA85CF2CD39467 /* Generators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generators.swift; sourceTree = "<group>"; };
+		5ADE2549CB0A945B1171FE5E /* RouteBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBoardView.swift; sourceTree = "<group>"; };
+		61291C33AFF80298BF3C6275 /* CityBioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityBioService.swift; sourceTree = "<group>"; };
+		65D0D84019C94C384E72E6D3 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
+		884981A7A03EBC78201C16D5 /* AirLine.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AirLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		89BDF9AA1196D25F1E57CD33 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		999C49F1FE1C8BCAFA5FE8E3 /* airports.min.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = airports.min.json; sourceTree = "<group>"; };
+		A89D9D97BFA6E0FD654A81B9 /* CabinClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabinClass.swift; sourceTree = "<group>"; };
+		B964A8347163508295585165 /* AirLineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirLineApp.swift; sourceTree = "<group>"; };
+		BB6DC6C69238C69E8DF0F949 /* AirLineWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirLineWidgetBundle.swift; sourceTree = "<group>"; };
+		C3D5E28D7512A78BBE5474E9 /* city_bios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = city_bios.json; sourceTree = "<group>"; };
+		D140A92E40F2132581E0CF4B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		D260D2FF0EFCA60760B02D91 /* AirLineWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = AirLineWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D38A8D89726C46C37A5A4C48 /* GreatCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatCircle.swift; sourceTree = "<group>"; };
+		D9BBD3ECEF3084D55A38D5CE /* TimeMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMapping.swift; sourceTree = "<group>"; };
+		DE7B84026157781B0CF19177 /* AirportStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportStore.swift; sourceTree = "<group>"; };
+		E78B27AF57BE8FDB0C1D1B89 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		F8461D5583A5FB0EC7284651 /* FocusFlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusFlightView.swift; sourceTree = "<group>"; };
+		FC96C1DA33DC3609143228E4 /* FlightActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightActivityAttributes.swift; sourceTree = "<group>"; };
+		FCE072338BEACB70B27CDCD4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0DC3AD9357968924B59F842A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				61291C33AFF80298BF3C6275 /* CityBioService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		1D87788D51EFCF8B857313EE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DE7B84026157781B0CF19177 /* AirportStore.swift */,
+				A89D9D97BFA6E0FD654A81B9 /* CabinClass.swift */,
+				4CC52771DABA85CF2CD39467 /* Generators.swift */,
+				D38A8D89726C46C37A5A4C48 /* GreatCircle.swift */,
+				3EFA8E0B32DCCB2BB7B3A054 /* Models.swift */,
+				D9BBD3ECEF3084D55A38D5CE /* TimeMapping.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		233D7CAD69D8656395C8C3A4 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FC96C1DA33DC3609143228E4 /* FlightActivityAttributes.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		32E92904213EBE09C6FEAEA3 /* Me */ = {
+			isa = PBXGroup;
+			children = (
+				E78B27AF57BE8FDB0C1D1B89 /* MeView.swift */,
+			);
+			path = Me;
+			sourceTree = "<group>";
+		};
+		37A2CC56253E9CA10B8737CD /* AirLineWidget */ = {
+			isa = PBXGroup;
+			children = (
+				BB6DC6C69238C69E8DF0F949 /* AirLineWidgetBundle.swift */,
+				130A3B94C09412DE108A69F1 /* Info.plist */,
+			);
+			path = AirLineWidget;
+			sourceTree = "<group>";
+		};
+		38D340D8254ABCFCA170C691 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				3F6F879E5356A9CCA678F098 /* DemoSeeder.swift */,
+				89BDF9AA1196D25F1E57CD33 /* Theme.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		503316B9F5048B0E96DB2969 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				884981A7A03EBC78201C16D5 /* AirLine.app */,
+				D260D2FF0EFCA60760B02D91 /* AirLineWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5E86C5800049188B5F2E64AF /* Fly */ = {
+			isa = PBXGroup;
+			children = (
+				2F49E7E13937D284D78586FC /* BoardingPassView.swift */,
+				0224C4C77ED312746F1680A5 /* FlyHomeView.swift */,
+				F8461D5583A5FB0EC7284651 /* FocusFlightView.swift */,
+				65D0D84019C94C384E72E6D3 /* LandingView.swift */,
+				5ADE2549CB0A945B1171FE5E /* RouteBoardView.swift */,
+			);
+			path = Fly;
+			sourceTree = "<group>";
+		};
+		6284CCF958932036384A0A38 = {
+			isa = PBXGroup;
+			children = (
+				E4FF044DE25B4712DE9C06F1 /* AirLine */,
+				37A2CC56253E9CA10B8737CD /* AirLineWidget */,
+				233D7CAD69D8656395C8C3A4 /* Shared */,
+				503316B9F5048B0E96DB2969 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B0603ECD229EAC4A4DED00F6 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				04AB978D8424F4564F1B54C6 /* FlightEngine.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		B5BFAD9D2DABE3F0CED6CE97 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				999C49F1FE1C8BCAFA5FE8E3 /* airports.min.json */,
+				C3D5E28D7512A78BBE5474E9 /* city_bios.json */,
+				29786D4E6001A4D65E899002 /* world_land.min.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D245304A8BA369B282408FDD /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				0EDF365E2189BA0EC46EC94B /* MapRenderer.swift */,
+				07DA7F0B88A54DEE087A299E /* MapTabView.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		E4FF044DE25B4712DE9C06F1 /* AirLine */ = {
+			isa = PBXGroup;
+			children = (
+				B964A8347163508295585165 /* AirLineApp.swift */,
+				4323B935FE2836CC6613DCF2 /* Info.plist */,
+				B0603ECD229EAC4A4DED00F6 /* Engine */,
+				1D87788D51EFCF8B857313EE /* Models */,
+				B5BFAD9D2DABE3F0CED6CE97 /* Resources */,
+				0DC3AD9357968924B59F842A /* Services */,
+				38D340D8254ABCFCA170C691 /* Support */,
+				E950960522AC3E74C63749FA /* Views */,
+			);
+			path = AirLine;
+			sourceTree = "<group>";
+		};
+		E950960522AC3E74C63749FA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D140A92E40F2132581E0CF4B /* OnboardingView.swift */,
+				FCE072338BEACB70B27CDCD4 /* RootView.swift */,
+				5E86C5800049188B5F2E64AF /* Fly */,
+				D245304A8BA369B282408FDD /* Map */,
+				32E92904213EBE09C6FEAEA3 /* Me */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		351BA65A5B76238FF3CD4AB7 /* AirLine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84B79C187D668863CC3C6F6D /* Build configuration list for PBXNativeTarget "AirLine" */;
+			buildPhases = (
+				56097D90D8017962D0AA3643 /* Sources */,
+				E0A6684F52F77DE1CA111A58 /* Resources */,
+				91F04B783BD271B7CEBA9E9D /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				446DBE44DAA510BA0A9BCC8C /* PBXTargetDependency */,
+			);
+			name = AirLine;
+			packageProductDependencies = (
+			);
+			productName = AirLine;
+			productReference = 884981A7A03EBC78201C16D5 /* AirLine.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EA8AA5C7A2A7ADF60E5F3938 /* AirLineWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9C648E599DA9837E52F5CBF /* Build configuration list for PBXNativeTarget "AirLineWidget" */;
+			buildPhases = (
+				C0FEB4F67D0811DABB098CCB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AirLineWidget;
+			packageProductDependencies = (
+			);
+			productName = AirLineWidget;
+			productReference = D260D2FF0EFCA60760B02D91 /* AirLineWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6948E0915ED9E622C058ACE5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					351BA65A5B76238FF3CD4AB7 = {
+						ProvisioningStyle = Automatic;
+					};
+					EA8AA5C7A2A7ADF60E5F3938 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 59E746D116BEA63E4A26C1A7 /* Build configuration list for PBXProject "AirLine" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6284CCF958932036384A0A38;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 503316B9F5048B0E96DB2969 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				351BA65A5B76238FF3CD4AB7 /* AirLine */,
+				EA8AA5C7A2A7ADF60E5F3938 /* AirLineWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E0A6684F52F77DE1CA111A58 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCAC546A4F50578CD0A080E3 /* airports.min.json in Resources */,
+				9CDECB3CC7937E6EAFF65EF0 /* city_bios.json in Resources */,
+				211DCE7D3CECA3B53ED1B8DF /* world_land.min.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		56097D90D8017962D0AA3643 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8139693391AA6E8058291946 /* AirLineApp.swift in Sources */,
+				BA09EAAB855E7879A8D9FB89 /* AirportStore.swift in Sources */,
+				ED25C8E1741BD237A9D74584 /* BoardingPassView.swift in Sources */,
+				2937B5A790105C77086409F2 /* CabinClass.swift in Sources */,
+				2F9FCB1136B1C76B98145A1A /* CityBioService.swift in Sources */,
+				E82CEF081391D35AE30620EE /* DemoSeeder.swift in Sources */,
+				B3CD192C3AF8AA4E8D5FFFBD /* FlightActivityAttributes.swift in Sources */,
+				D40D48AAD8A02CAD9A854577 /* FlightEngine.swift in Sources */,
+				18F979813893281F562690EA /* FlyHomeView.swift in Sources */,
+				36FB106D807A4D08FF99C8A5 /* FocusFlightView.swift in Sources */,
+				19E0F1FB32597DBE4CBBAA78 /* Generators.swift in Sources */,
+				B1B6FFBEC30D523DCED5B0F3 /* GreatCircle.swift in Sources */,
+				50E5563D377B36C10C69807C /* LandingView.swift in Sources */,
+				204A2BE4AB23D1711990686F /* MapRenderer.swift in Sources */,
+				F5E30EBBA94AD7444BEB7101 /* MapTabView.swift in Sources */,
+				8B151A9039CD9AC5B06822EF /* MeView.swift in Sources */,
+				2A9ADA708CA0122C4C4F76D4 /* Models.swift in Sources */,
+				4A4691B94A14527E9BBC0417 /* OnboardingView.swift in Sources */,
+				682B8FEFD0A38E7CF970CAA8 /* RootView.swift in Sources */,
+				D4A930DC490A046AB013862D /* RouteBoardView.swift in Sources */,
+				CF5E5DD46DB855A2459408FE /* Theme.swift in Sources */,
+				97E9050CA7979579ECE7CCCC /* TimeMapping.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0FEB4F67D0811DABB098CCB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D1135A55A57AAD4CB2985ED /* AirLineWidgetBundle.swift in Sources */,
+				B3E9A6F0C3BF59CFAF90B7FA /* FlightActivityAttributes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		446DBE44DAA510BA0A9BCC8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EA8AA5C7A2A7ADF60E5F3938 /* AirLineWidget */;
+			targetProxy = BE9EF3A635B9C51D0250188E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		100A8CFACEEB12CB6E1FE8DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = AirLineWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.airline.focus.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		69F498AFE4822C2D58B9A8EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = AirLine/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.airline.focus;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7A9EDA19D3A7ECB74C137D05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = AirLineWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.airline.focus.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A81558A750B3F6EC6DFE0F21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Release;
+		};
+		C8A814F00A510525B9AED3D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+		F2D306E6EBDFE2BF8177639A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = AirLine/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.airline.focus;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		59E746D116BEA63E4A26C1A7 /* Build configuration list for PBXProject "AirLine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C8A814F00A510525B9AED3D7 /* Debug */,
+				A81558A750B3F6EC6DFE0F21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		84B79C187D668863CC3C6F6D /* Build configuration list for PBXNativeTarget "AirLine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F2D306E6EBDFE2BF8177639A /* Debug */,
+				69F498AFE4822C2D58B9A8EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A9C648E599DA9837E52F5CBF /* Build configuration list for PBXNativeTarget "AirLineWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A9EDA19D3A7ECB74C137D05 /* Debug */,
+				100A8CFACEEB12CB6E1FE8DA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6948E0915ED9E622C058ACE5 /* Project object */;
+}
