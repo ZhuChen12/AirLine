@@ -10,7 +10,7 @@ import SwiftData
 /// 参数（可组合，按下列顺序生效）:
 ///   --demo-reset    清空全部本地数据
 ///   --demo-profile  若无档案则创建（CHEN YU / 主场 PVG）
-///   --demo-history  预置三段已完成飞行（PVG→NRT→SIN→LHR），点亮城市+护照
+///   --demo-history  预置三段已完成飞行（PVG→NRT→SIN→LHR），额外点亮沿途城市+护照
 ///   --demo-journey  预置一段接力旅程停在检查点（LHR→JFK，已飞 60 分钟）
 ///   --demo-flying   立即开始一段 1 分钟的专注段（快速看专注页/灵动岛/落地结算）
 @MainActor
@@ -112,7 +112,11 @@ enum DemoSeeder {
                                     carrierCode: carrier,
                                     carrierName: store.carrierNames[carrier] ?? carrier,
                                     cabin: profile.cabin)
-        journey.completedFocusMinutes = min(60, journey.focusMinutes / 2)
+        if ProcessInfo.processInfo.arguments.contains("--demo-final-relay") {
+            journey.completedFocusMinutes = max(0, journey.focusMinutes - 5)
+        } else {
+            journey.completedFocusMinutes = min(60, journey.focusMinutes / 2)
+        }
         journey.creditedKm = Int(Double(journey.totalKm) * journey.checkpointFraction)
         context.insert(journey)
     }

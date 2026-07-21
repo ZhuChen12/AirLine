@@ -107,7 +107,8 @@ struct FocusFlightView: View {
 
     /// 局部航图：大圆航线 + 实时推进的飞机
     private var routeMap: some View {
-        TimelineView(.periodic(from: .now, by: 1)) { _ in
+        TimelineView(.animation(minimumInterval: 1.0 / 15.0)) { timeline in
+            let flightFraction = currentFraction(at: timeline.date)
             Canvas { ctx, size in
                 guard let o = origin, let d = dest else { return }
                 let segments = MapRenderer.routeSegments(from: o, to: d)
@@ -137,8 +138,7 @@ struct FocusFlightView: View {
                            style: StrokeStyle(lineWidth: 1.6 / s, dash: [4 / s, 4 / s]))
 
                 // 已飞段高亮
-                let f = currentFraction()
-                let done = doneSegments(from: o, to: d, fraction: f)
+                let done = doneSegments(from: o, to: d, fraction: flightFraction)
                 ctx.stroke(MapRenderer.path(for: done), with: .color(Theme.glow),
                            style: StrokeStyle(lineWidth: 2.2 / s, lineCap: .round))
 
@@ -150,10 +150,11 @@ struct FocusFlightView: View {
 
                 // 飞机（自绘镖形，机头朝 +x 后按航向旋转）
                 let pos = GreatCircle.interpolate(lat1: o.latitude, lon1: o.longitude,
-                                                  lat2: d.latitude, lon2: d.longitude, f: f)
+                                                  lat2: d.latitude, lon2: d.longitude,
+                                                  f: flightFraction)
                 let ahead = GreatCircle.interpolate(lat1: o.latitude, lon1: o.longitude,
                                                     lat2: d.latitude, lon2: d.longitude,
-                                                    f: min(1, f + 0.01))
+                                                    f: min(1, flightFraction + 0.01))
                 let p0 = MapRenderer.basePoint(lat: pos.lat, lon: pos.lon)
                 let p1 = MapRenderer.basePoint(lat: ahead.lat, lon: ahead.lon)
                 let heading = Angle(radians: atan2(p1.y - p0.y, p1.x - p0.x))
@@ -175,11 +176,11 @@ struct FocusFlightView: View {
         }
     }
 
-    private func currentFraction() -> Double {
+    private func currentFraction(at date: Date = Date()) -> Double {
         guard let start = journey.segmentStartAt else { return journey.checkpointFraction }
         let total = TimeInterval(journey.segmentMinutes * 60)
         guard total > 0 else { return journey.checkpointFraction }
-        let elapsed = min(max(Date().timeIntervalSince(start), 0), total)
+        let elapsed = min(max(date.timeIntervalSince(start), 0), total)
         let segSpan = journey.segmentEndFraction - journey.checkpointFraction
         return journey.checkpointFraction + segSpan * (elapsed / total)
     }

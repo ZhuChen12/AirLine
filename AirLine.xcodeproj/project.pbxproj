@@ -81,7 +81,7 @@
 		61291C33AFF80298BF3C6275 /* CityBioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityBioService.swift; sourceTree = "<group>"; };
 		65D0D84019C94C384E72E6D3 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 		739574326B2987965665C639 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		884981A7A03EBC78201C16D5 /* AirLine.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AirLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		884981A7A03EBC78201C16D5 /* AirLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89BDF9AA1196D25F1E57CD33 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		999C49F1FE1C8BCAFA5FE8E3 /* airports.min.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = airports.min.json; sourceTree = "<group>"; };
 		A89D9D97BFA6E0FD654A81B9 /* CabinClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabinClass.swift; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		BB6DC6C69238C69E8DF0F949 /* AirLineWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirLineWidgetBundle.swift; sourceTree = "<group>"; };
 		C3D5E28D7512A78BBE5474E9 /* city_bios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = city_bios.json; sourceTree = "<group>"; };
 		D140A92E40F2132581E0CF4B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		D260D2FF0EFCA60760B02D91 /* AirLineWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = AirLineWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D260D2FF0EFCA60760B02D91 /* AirLineWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AirLineWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D38A8D89726C46C37A5A4C48 /* GreatCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatCircle.swift; sourceTree = "<group>"; };
 		D9BBD3ECEF3084D55A38D5CE /* TimeMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMapping.swift; sourceTree = "<group>"; };
 		DE2FFA8E334F2A19C19544EC /* CabinRulesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabinRulesView.swift; sourceTree = "<group>"; };
@@ -390,6 +390,7 @@
 		100A8CFACEEB12CB6E1FE8DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 78P7JRQLCT;
 				INFOPLIST_FILE = AirLineWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -408,6 +409,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 78P7JRQLCT;
 				INFOPLIST_FILE = AirLine/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -422,6 +424,7 @@
 		7A9EDA19D3A7ECB74C137D05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 78P7JRQLCT;
 				INFOPLIST_FILE = AirLineWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -565,6 +568,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 78P7JRQLCT;
 				INFOPLIST_FILE = AirLine/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

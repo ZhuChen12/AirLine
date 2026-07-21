@@ -26,7 +26,7 @@ final class CityBioService {
 
     /// 极端兜底（全量覆盖后理论上不应走到）
     func fallback(for airport: Airport) -> CityBio {
-        CityBio(tag: airport.country,
-                body: "\(airport.displayCity)（\(airport.city)），\(airport.country)。经由 \(airport.name)（\(airport.icaoKey)）抵达。")
+        CityBio(tag: airport.displayCountry,
+                body: "\(airport.displayCity)，位于\(airport.displayCountry)。经由 \(airport.name)（\(airport.icaoKey)）抵达。")
     }
 }

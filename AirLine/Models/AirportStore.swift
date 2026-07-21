@@ -32,8 +32,11 @@ struct Airport: Decodable, Identifiable, Hashable {
         case continent = "ct", latitude = "la", longitude = "lo", timezone = "tz", routes = "r"
     }
 
-    /// 中文优先的城市显示名
-    var displayCity: String { cityZh.isEmpty ? city : cityZh }
+    /// 产品界面只展示中文城市名；构建期会校验 cityZh 全量存在。
+    var displayCity: String { cityZh.isEmpty ? "未知城市" : cityZh }
+    var displayCountry: String {
+        Locale(identifier: "zh_Hans").localizedString(forRegionCode: countryCode) ?? country
+    }
     var tz: TimeZone { TimeZone(identifier: timezone) ?? .current }
 }
 
@@ -81,13 +84,17 @@ final class AirportStore {
         guard !q.isEmpty else { return Array(byDegree.prefix(limit)) }
         let lower = q.lowercased()
         let upper = q.uppercased()
+        let compact = lower.replacingOccurrences(of: " ", with: "")
         var hits: [Airport] = []
         for a in byDegree {
             if a.icaoKey == upper
                 || a.city.lowercased().contains(lower)
                 || a.cityZh.contains(q)
                 || a.name.lowercased().contains(lower)
-                || a.country.lowercased().contains(lower) {
+                || a.country.lowercased().contains(lower)
+                || a.displayCountry.contains(q)
+                || a.countryCode.uppercased() == upper
+                || a.city.lowercased().replacingOccurrences(of: " ", with: "").contains(compact) {
                 hits.append(a)
                 if hits.count >= limit { break }
             }

@@ -4,16 +4,23 @@ import UIKit
 
 /// 暗色世界地图：点亮城市 + 历史航迹，可缩放平移，点击看城市卡（SPEC §8）
 struct MapTabView: View {
+    let profile: PlayerProfile
+    let isActive: Bool
+
     @Query private var visits: [CityVisit]
-    @Query private var profiles: [PlayerProfile]
     @Query(filter: #Predicate<FlightRecord> { $0.statusRaw == 0 })
     private var completedFlights: [FlightRecord]
 
-    @State private var zoom: CGFloat = 1
-    @State private var offset: CGSize = .zero
+    @State private var zoom: CGFloat = 3
+    @State private var centerPoint = CGPoint(
+        x: MapRenderer.baseSize.width / 2,
+        y: MapRenderer.baseSize.height / 2
+    )
     @GestureState private var pinch: CGFloat = 1
     @GestureState private var drag: CGSize = .zero
     @State private var tappedVisit: CityVisit?
+
+    private var currentAirport: Airport? { AirportStore.shared[profile.currentIata] }
 
     private var routePairs: [(String, String)] {
         var seen = Set<String>()
@@ -33,30 +40,50 @@ struct MapTabView: View {
             let fit = size.width / MapRenderer.baseSize.width
             let liveZoom = min(max(zoom * pinch, 1), 16)
             let s = fit * liveZoom
-            let off = CGSize(width: offset.width + drag.width, height: offset.height + drag.height)
-            let labels = cityLabels(in: size, scale: s, offset: off, zoom: liveZoom)
+            let liveCenter = cameraCenter(
+                from: centerPoint,
+                translation: drag,
+                scale: s
+            )
+            let labels = cityLabels(in: size, scale: s, center: liveCenter, zoom: liveZoom)
 
             ZStack {
                 Theme.bg.ignoresSafeArea()
                 Canvas { ctx, canvasSize in
-                    ctx.translateBy(x: canvasSize.width / 2 + off.width,
-                                    y: canvasSize.height / 2 + off.height)
-                    ctx.scaleBy(x: s, y: s)
-                    ctx.translateBy(x: -MapRenderer.baseSize.width / 2,
-                                    y: -MapRenderer.baseSize.height / 2)
+                    for copy in -1...1 {
+                        var world = ctx
+                        world.translateBy(x: canvasSize.width / 2, y: canvasSize.height / 2)
+                        world.scaleBy(x: s, y: s)
+                        world.translateBy(
+                            x: -liveCenter.x + CGFloat(copy) * MapRenderer.baseSize.width,
+                            y: -liveCenter.y
+                        )
 
-                    MapRenderer.drawLand(ctx, totalScale: s)
+                        MapRenderer.drawLand(world, totalScale: s)
 
-                    let store = AirportStore.shared
-                    for (o, d) in routePairs {
-                        guard let a = store[o], let b = store[d] else { continue }
-                        let p = MapRenderer.path(for: MapRenderer.routeSegments(from: a, to: b))
-                        ctx.stroke(p, with: .color(Theme.track.opacity(0.4)),
-                                   style: StrokeStyle(lineWidth: max(0.4, 1.0 / s), lineCap: .round))
-                    }
-                    for v in visits {
-                        let p = MapRenderer.basePoint(lat: v.latitude, lon: v.longitude)
-                        MapRenderer.drawGlowCity(ctx, at: p, totalScale: s)
+                        let store = AirportStore.shared
+                        for (o, d) in routePairs {
+                            guard let a = store[o], let b = store[d] else { continue }
+                            let path = MapRenderer.path(for: MapRenderer.routeSegments(from: a, to: b))
+                            world.stroke(
+                                path,
+                                with: .color(Theme.track.opacity(0.4)),
+                                style: StrokeStyle(
+                                    lineWidth: max(0.4, 1.0 / s),
+                                    lineCap: .round
+                                )
+                            )
+                        }
+                        for visit in visits {
+                            let point = MapRenderer.basePoint(
+                                lat: visit.latitude,
+                                lon: visit.longitude
+                            )
+                            MapRenderer.drawGlowCity(world, at: point, totalScale: s)
+                        }
+                        if let currentAirport {
+                            drawCurrentCity(currentAirport, in: world, scale: s)
+                        }
                     }
                 }
                 .contentShape(Rectangle())
@@ -64,24 +91,27 @@ struct MapTabView: View {
                     DragGesture()
                         .updating($drag) { value, state, _ in state = value.translation }
                         .onEnded { value in
-                            let proposed = CGSize(
-                                width: offset.width + value.translation.width,
-                                height: offset.height + value.translation.height
+                            centerPoint = cameraCenter(
+                                from: centerPoint,
+                                translation: value.translation,
+                                scale: fit * zoom
                             )
-                            offset = constrainedOffset(proposed, size: size, zoom: zoom)
                         }
                 )
                 .simultaneousGesture(
                     MagnificationGesture()
                         .updating($pinch) { value, state, _ in state = value }
                         .onEnded { value in
-                            let target = min(max(zoom * value, 1), 16)
-                            zoom = target
-                            offset = constrainedOffset(offset, size: size, zoom: target)
+                            zoom = min(max(zoom * value, 1), 16)
                         }
                 )
                 .onTapGesture(coordinateSpace: .local) { location in
-                    tappedVisit = nearestVisit(to: location, size: size, scale: s, offset: off)
+                    tappedVisit = nearestVisit(
+                        to: location,
+                        size: size,
+                        scale: s,
+                        center: liveCenter
+                    )
                 }
 
                 Canvas { context, _ in
@@ -113,10 +143,8 @@ struct MapTabView: View {
                 .allowsHitTesting(false)
 
                 VStack {
-                    HStack(spacing: 14) {
-                        statChip(value: "\(visits.count)", label: "城市")
-                        statChip(value: "\(Set(visits.map(\.countryCode)).count)", label: "国家")
-                        statChip(value: formatKm(profiles.first?.totalKm ?? 0), label: "里程")
+                    HStack {
+                        statsPanel()
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -128,11 +156,15 @@ struct MapTabView: View {
                             .padding(.bottom, 28)
                     }
                 }
-
-                zoomControls(size: size)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                    .padding(.trailing, 16)
-                    .padding(.bottom, 24)
+            }
+            .onAppear {
+                centerOnCurrentCity(in: size)
+            }
+            .onChange(of: isActive) { _, active in
+                if active { centerOnCurrentCity(in: size) }
+            }
+            .onChange(of: profile.currentIata) { _, _ in
+                centerOnCurrentCity(in: size)
             }
         }
         .sheet(item: $tappedVisit) { visit in
@@ -149,72 +181,104 @@ struct MapTabView: View {
         #endif
     }
 
-    private func statChip(value: String, label: String) -> some View {
+    private func statsPanel() -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("飞行总览")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(Theme.textSecondary)
+                .tracking(0.8)
+            HStack(spacing: 0) {
+                statCell(value: "\(visits.count)", label: "城市")
+                statDivider()
+                statCell(value: "\(Set(visits.map(\.countryCode)).count)", label: "国家")
+                statDivider()
+                statCell(value: formatKm(profile.totalKm), label: "里程")
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 11)
+        .background(Theme.card.opacity(0.86), in: RoundedRectangle(cornerRadius: 18))
+        .overlay {
+            RoundedRectangle(cornerRadius: 18)
+                .strokeBorder(Theme.landStroke.opacity(0.55), lineWidth: 0.8)
+        }
+    }
+
+    private func statCell(value: String, label: String) -> some View {
         HStack(spacing: 5) {
             Text(value)
                 .font(.system(.subheadline, design: .monospaced).bold())
                 .foregroundStyle(Theme.glow)
             Text(label).font(.caption).foregroundStyle(Theme.textSecondary)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(Theme.card.opacity(0.8), in: Capsule())
+        .frame(minWidth: 58, alignment: .leading)
     }
 
-    private func zoomControls(size: CGSize) -> some View {
-        VStack(spacing: 0) {
-            Text("\(Int((zoom * 100).rounded()))%")
-                .font(.system(size: 9, weight: .semibold, design: .monospaced))
-                .foregroundStyle(Theme.textSecondary)
-                .frame(width: 44, height: 24)
-            Divider().overlay(Theme.landStroke)
-            zoomButton("plus") {
-                setZoom(min(16, zoom * 1.6), size: size)
-            }
-            Divider().overlay(Theme.landStroke)
-            zoomButton("minus") {
-                setZoom(max(1, zoom / 1.6), size: size)
-            }
-            Divider().overlay(Theme.landStroke)
-            zoomButton("arrow.counterclockwise") {
-                withAnimation(.spring(duration: 0.35)) {
-                    zoom = 1
-                    offset = .zero
-                }
-            }
-        }
-        .background(Theme.card.opacity(0.92), in: RoundedRectangle(cornerRadius: 12))
-        .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(Theme.landStroke.opacity(0.8))
+    private func statDivider() -> some View {
+        Rectangle()
+            .fill(Theme.landStroke.opacity(0.45))
+            .frame(width: 1, height: 20)
+            .padding(.horizontal, 12)
+    }
+
+    private func centerOnCurrentCity(in size: CGSize) {
+        guard let currentAirport else { return }
+        withAnimation(.easeInOut(duration: 0.28)) {
+            centerPoint = MapRenderer.basePoint(
+                lat: currentAirport.latitude,
+                lon: currentAirport.longitude
+            )
+            let aspectZoom = size.height / max(size.width, 1) * 3.8
+            zoom = min(max(aspectZoom, 7.6), 8.8)
         }
     }
 
-    private func zoomButton(_ systemName: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(Theme.textPrimary)
-                .frame(width: 44, height: 38)
-                .contentShape(Rectangle())
-        }
+    private func cameraCenter(from original: CGPoint, translation: CGSize,
+                              scale: CGFloat) -> CGPoint {
+        CGPoint(
+            x: wrappedX(original.x - translation.width / max(scale, 0.001)),
+            y: min(
+                max(original.y - translation.height / max(scale, 0.001), 0),
+                MapRenderer.baseSize.height
+            )
+        )
     }
 
-    private func setZoom(_ target: CGFloat, size: CGSize) {
-        withAnimation(.easeInOut(duration: 0.22)) {
-            zoom = target
-            offset = constrainedOffset(offset, size: size, zoom: target)
-        }
+    private func wrappedX(_ x: CGFloat) -> CGFloat {
+        let width = MapRenderer.baseSize.width
+        let remainder = x.truncatingRemainder(dividingBy: width)
+        return remainder < 0 ? remainder + width : remainder
     }
 
-    private func constrainedOffset(_ proposed: CGSize, size: CGSize, zoom: CGFloat) -> CGSize {
-        let mapWidth = size.width * zoom
-        let mapHeight = size.width * zoom / 2
-        let maxX = max(0, (mapWidth - size.width) / 2)
-        let maxY = max(0, (mapHeight - size.height) / 2)
-        return CGSize(
-            width: min(max(proposed.width, -maxX), maxX),
-            height: min(max(proposed.height, -maxY), maxY)
+    private func wrappedDeltaX(_ x: CGFloat, centerX: CGFloat) -> CGFloat {
+        let width = MapRenderer.baseSize.width
+        var delta = (x - centerX).truncatingRemainder(dividingBy: width)
+        if delta > width / 2 { delta -= width }
+        if delta < -width / 2 { delta += width }
+        return delta
+    }
+
+    private func screenPoint(base: CGPoint, size: CGSize, scale: CGFloat,
+                             center: CGPoint) -> CGPoint {
+        CGPoint(
+            x: size.width / 2 + wrappedDeltaX(base.x, centerX: center.x) * scale,
+            y: size.height / 2 + (base.y - center.y) * scale
+        )
+    }
+
+    private func drawCurrentCity(_ airport: Airport, in context: GraphicsContext,
+                                 scale: CGFloat) {
+        let point = MapRenderer.basePoint(lat: airport.latitude, lon: airport.longitude)
+        let radius = 8 / scale
+        context.stroke(
+            Path(ellipseIn: CGRect(
+                x: point.x - radius,
+                y: point.y - radius,
+                width: radius * 2,
+                height: radius * 2
+            )),
+            with: .color(Theme.glow),
+            lineWidth: 1.2 / scale
         )
     }
 
@@ -224,41 +288,61 @@ struct MapTabView: View {
     }
 
     /// 在屏幕坐标中布局城市名，按枢纽连通度优先并剔除相交标签。
-    private func cityLabels(in size: CGSize, scale: CGFloat, offset: CGSize,
+    private func cityLabels(in size: CGSize, scale: CGFloat, center: CGPoint,
                             zoom: CGFloat) -> [MapCityLabel] {
-        let visible = visits.compactMap { visit -> (CityVisit, CGPoint, Int)? in
-            let base = MapRenderer.basePoint(lat: visit.latitude, lon: visit.longitude)
-            let point = CGPoint(
-                x: (base.x - MapRenderer.baseSize.width / 2) * scale + size.width / 2 + offset.width,
-                y: (base.y - MapRenderer.baseSize.height / 2) * scale + size.height / 2 + offset.height
+        var sources = visits.map { visit in
+            MapLabelSource(
+                iata: visit.iata,
+                name: visit.displayCity,
+                latitude: visit.latitude,
+                longitude: visit.longitude,
+                routeCount: AirportStore.shared[visit.iata]?.routes.count ?? 0,
+                isCurrent: visit.iata == profile.currentIata,
+                arrivalCount: visit.arrivalCount
             )
+        }
+        if let currentAirport,
+           !sources.contains(where: { $0.iata == currentAirport.icaoKey }) {
+            sources.append(MapLabelSource(
+                iata: currentAirport.icaoKey,
+                name: currentAirport.displayCity,
+                latitude: currentAirport.latitude,
+                longitude: currentAirport.longitude,
+                routeCount: currentAirport.routes.count,
+                isCurrent: true,
+                arrivalCount: 0
+            ))
+        }
+
+        let visible = sources.compactMap { source -> (MapLabelSource, CGPoint)? in
+            let base = MapRenderer.basePoint(lat: source.latitude, lon: source.longitude)
+            let point = screenPoint(base: base, size: size, scale: scale, center: center)
             guard point.x >= 0, point.x <= size.width,
                   point.y >= 54, point.y <= size.height else { return nil }
-            let routeCount = AirportStore.shared[visit.iata]?.routes.count ?? 0
-            return (visit, point, routeCount)
+            return (source, point)
         }
         .sorted {
-            if $0.2 != $1.2 { return $0.2 > $1.2 }
+            if $0.0.isCurrent != $1.0.isCurrent { return $0.0.isCurrent }
+            if $0.0.routeCount != $1.0.routeCount {
+                return $0.0.routeCount > $1.0.routeCount
+            }
             return $0.0.arrivalCount > $1.0.arrivalCount
         }
 
         let minimumRouteCount = zoom < 2 ? 40 : (zoom < 5 ? 20 : 0)
-        let major = visible.filter { $0.2 >= minimumRouteCount }
+        let major = visible.filter { $0.0.isCurrent || $0.0.routeCount >= minimumRouteCount }
         let candidates = major.isEmpty ? visible : major
         let limit = zoom < 2 ? 8 : (zoom < 5 ? 12 : 18)
         let safeBounds = CGRect(x: 6, y: 56, width: size.width - 12, height: size.height - 64)
-        var occupied = [
-            CGRect(x: 0, y: 0, width: size.width, height: 54),
-            CGRect(x: size.width - 70, y: size.height - 180, width: 70, height: 180),
-        ]
+        var occupied = [CGRect(x: 0, y: 0, width: size.width, height: 54)]
         var usedNames = Set<String>()
         var labels: [MapCityLabel] = []
         let font = UIFont.systemFont(ofSize: 11, weight: .semibold)
 
-        for (visit, point, _) in candidates {
-            let name = visit.displayCity
-            guard usedNames.insert(name).inserted else { continue }
-            let measured = (name as NSString).size(withAttributes: [.font: font])
+        for (source, point) in candidates {
+            guard usedNames.insert(source.name).inserted else { continue }
+            let displayName = source.isCurrent ? "\(source.name) · 当前" : source.name
+            let measured = (displayName as NSString).size(withAttributes: [.font: font])
             let labelSize = CGSize(width: min(150, ceil(measured.width) + 14), height: 22)
             let gap: CGFloat = 8
             let options = [
@@ -276,26 +360,40 @@ struct MapTabView: View {
                     && !occupied.contains(where: { $0.insetBy(dx: -4, dy: -3).intersects(candidate) })
             }) else { continue }
 
-            labels.append(MapCityLabel(name: name, point: point, rect: rect))
+            labels.append(MapCityLabel(
+                name: displayName,
+                point: point,
+                rect: rect
+            ))
             occupied.append(rect)
             if labels.count >= limit { break }
         }
         return labels
     }
 
-    private func nearestVisit(to location: CGPoint, size: CGSize, scale: CGFloat, offset: CGSize) -> CityVisit? {
+    private func nearestVisit(to location: CGPoint, size: CGSize, scale: CGFloat,
+                              center: CGPoint) -> CityVisit? {
         var best: (CityVisit, CGFloat)?
         for v in visits {
             let base = MapRenderer.basePoint(lat: v.latitude, lon: v.longitude)
-            let sx = (base.x - MapRenderer.baseSize.width / 2) * scale + size.width / 2 + offset.width
-            let sy = (base.y - MapRenderer.baseSize.height / 2) * scale + size.height / 2 + offset.height
-            let d = hypot(sx - location.x, sy - location.y)
+            let point = screenPoint(base: base, size: size, scale: scale, center: center)
+            let d = hypot(point.x - location.x, point.y - location.y)
             if d < 22, d < (best?.1 ?? .infinity) {
                 best = (v, d)
             }
         }
         return best?.0
     }
+}
+
+private struct MapLabelSource {
+    let iata: String
+    let name: String
+    let latitude: Double
+    let longitude: Double
+    let routeCount: Int
+    let isCurrent: Bool
+    let arrivalCount: Int
 }
 
 private struct MapCityLabel {
@@ -316,9 +414,6 @@ struct CityCardView: View {
                     Text(visit.displayCity)
                         .font(.title2.bold())
                         .foregroundStyle(Theme.textPrimary)
-                    Text(visit.city)
-                        .font(.subheadline)
-                        .foregroundStyle(Theme.textSecondary)
                     Spacer()
                     Text(visit.iata)
                         .font(.system(.headline, design: .monospaced))

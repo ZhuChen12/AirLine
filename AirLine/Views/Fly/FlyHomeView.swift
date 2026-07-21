@@ -43,6 +43,12 @@ struct FlyHomeView: View {
         #if DEBUG
         .onAppear {
             if ProcessInfo.processInfo.arguments.contains("--demo-board") { showBoard = true }
+            if ProcessInfo.processInfo.arguments.contains("--demo-segment-picker") {
+                Task {
+                    try? await Task.sleep(for: .milliseconds(600))
+                    showSegmentPicker = true
+                }
+            }
         }
         #endif
         .fullScreenCover(isPresented: $showBoard) {
@@ -50,7 +56,13 @@ struct FlyHomeView: View {
         }
         .sheet(isPresented: $showSegmentPicker) {
             if let j = journey {
-                ContinueSegmentSheet(journey: j)
+                SegmentDurationSheet(
+                    title: "继续飞行 \(j.originIata) → \(j.destIata)",
+                    remaining: j.remainingFocusMinutes,
+                    actionTitle: "起飞"
+                ) { minutes in
+                    FlightEngine.shared.startSegment(j, minutes: minutes)
+                }
                     .presentationDetents([.medium])
                     .presentationBackground(Theme.bgElevated)
             }
@@ -173,6 +185,13 @@ struct FlyHomeView: View {
                 .font(.caption)
                 .foregroundStyle(Theme.textSecondary)
 
+            Label(
+                "请先完成当前接力旅程；如需改飞其他航线，须返航至\(AirportStore.shared[j.originIata]?.displayCity ?? "原城市")。",
+                systemImage: "info.circle"
+            )
+            .font(.caption2)
+            .foregroundStyle(Theme.textSecondary)
+
             HStack(spacing: 10) {
                 Button {
                     showSegmentPicker = true
@@ -207,7 +226,7 @@ struct FlyHomeView: View {
         } label: {
             HStack {
                 Image(systemName: "airplane.departure")
-                Text("选择航线 · 值机")
+                Text("选择航线")
             }
             .font(.headline)
             .frame(maxWidth: .infinity)
@@ -238,22 +257,26 @@ struct FlyHomeView: View {
     }
 }
 
-/// 继续接力：选择本段时长
-struct ContinueSegmentSheet: View {
-    let journey: ActiveJourney
+/// 首段与后续接力共用的时长选择界面。
+struct SegmentDurationSheet: View {
+    let title: String
+    let remaining: Int
+    let actionTitle: String
+    let onConfirm: (Int) -> Void
+
     @Environment(\.dismiss) private var dismiss
     @State private var minutes: Int = 0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("继续飞行 \(journey.originIata) → \(journey.destIata)")
+            Text(title)
                 .font(.headline)
                 .foregroundStyle(Theme.textPrimary)
-            Text("剩余 \(TimeMapping.formatMinutes(journey.remainingFocusMinutes))")
+            Text("剩余 \(TimeMapping.formatMinutes(remaining))")
                 .font(.subheadline)
                 .foregroundStyle(Theme.textSecondary)
 
-            let opts = TimeMapping.segmentOptions(remaining: journey.remainingFocusMinutes)
+            let opts = TimeMapping.segmentOptions(remaining: remaining)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))], spacing: 10) {
                 ForEach(opts, id: \.self) { m in
                     Button {
@@ -261,8 +284,13 @@ struct ContinueSegmentSheet: View {
                     } label: {
                         VStack(spacing: 2) {
                             Text(TimeMapping.formatMinutes(m)).font(.subheadline.bold())
-                            if m == journey.remainingFocusMinutes {
-                                Text("飞完全程").font(.system(size: 9))
+                            if TimeMapping.progressMinutes(forTimer: m, remaining: remaining) == remaining {
+                                Text(
+                                    m > remaining
+                                        ? "完成剩余 \(remaining) 分钟"
+                                        : "飞完全程"
+                                )
+                                .font(.system(size: 9))
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -275,10 +303,10 @@ struct ContinueSegmentSheet: View {
             }
 
             Button {
-                FlightEngine.shared.startSegment(journey, minutes: minutes)
+                onConfirm(minutes)
                 dismiss()
             } label: {
-                Text("起飞 · 本段 \(TimeMapping.formatMinutes(minutes))")
+                Text("\(actionTitle) · 本段 \(TimeMapping.formatMinutes(minutes))")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
@@ -290,7 +318,8 @@ struct ContinueSegmentSheet: View {
         .padding(20)
         .background(Theme.bgElevated)
         .onAppear {
-            minutes = min(45, journey.remainingFocusMinutes)
+            let options = TimeMapping.segmentOptions(remaining: remaining)
+            minutes = options.contains(45) ? 45 : (options.first ?? remaining)
         }
     }
 }

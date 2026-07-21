@@ -97,7 +97,9 @@ final class CityVisit {
         firstArrivalAt = date
     }
 
-    var displayCity: String { cityZh.isEmpty ? city : cityZh }
+    var displayCity: String {
+        AirportStore.shared[iata]?.displayCity ?? (cityZh.isEmpty ? "未知城市" : cityZh)
+    }
 }
 
 /// 护照盖章（按国家首次落地）
@@ -113,6 +115,32 @@ final class PassportStamp {
         self.country = country
         self.firstCity = firstCity
         self.stampedAt = stampedAt
+    }
+}
+
+@MainActor
+enum InitialCityLighting {
+    static func ensureHomeCity(for profile: PlayerProfile, context: ModelContext) {
+        let homeIata = profile.homeIata.isEmpty ? profile.currentIata : profile.homeIata
+        guard let home = AirportStore.shared[homeIata] else { return }
+
+        var visitFetch = FetchDescriptor<CityVisit>(predicate: #Predicate { $0.iata == homeIata })
+        visitFetch.fetchLimit = 1
+        if (try? context.fetch(visitFetch))?.first == nil {
+            context.insert(CityVisit(airport: home, at: profile.createdAt))
+        }
+
+        let countryCode = home.countryCode
+        var stampFetch = FetchDescriptor<PassportStamp>(predicate: #Predicate { $0.countryCode == countryCode })
+        stampFetch.fetchLimit = 1
+        if (try? context.fetch(stampFetch))?.first == nil {
+            context.insert(PassportStamp(
+                countryCode: countryCode,
+                country: home.country,
+                firstCity: home.displayCity,
+                stampedAt: profile.createdAt
+            ))
+        }
     }
 }
 
@@ -137,7 +165,10 @@ final class ActiveJourney {
     var checkInAt: Date = Date()
     /// 进行中的段（nil = 停在检查点）
     var segmentStartAt: Date? = nil
+    /// 本段实际倒计时时长；末段不足 15 分钟时仍计时 15 分钟。
     var segmentMinutes: Int = 0
+    /// 本段推进旅程的计划分钟数，通常与倒计时相同。
+    var segmentProgressMinutes: Int = 0
 
     init(origin: Airport, dest: Airport, edge: RouteEdge, carrierCode: String, carrierName: String, cabin: CabinClass) {
         originIata = origin.icaoKey
@@ -164,8 +195,15 @@ final class ActiveJourney {
     var segmentEndAt: Date? {
         segmentStartAt?.addingTimeInterval(TimeInterval(segmentMinutes * 60))
     }
+    var effectiveSegmentProgressMinutes: Int {
+        segmentProgressMinutes > 0
+            ? segmentProgressMinutes
+            : min(segmentMinutes, remainingFocusMinutes)
+    }
     /// 本段结束时的航线进度
     var segmentEndFraction: Double {
-        focusMinutes > 0 ? Double(min(completedFocusMinutes + segmentMinutes, focusMinutes)) / Double(focusMinutes) : 1
+        focusMinutes > 0
+            ? Double(min(completedFocusMinutes + effectiveSegmentProgressMinutes, focusMinutes)) / Double(focusMinutes)
+            : 1
     }
 }

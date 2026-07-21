@@ -54,8 +54,14 @@ final class FlightEngine {
     }
 
     func startSegment(_ journey: ActiveJourney, minutes: Int) {
-        let m = min(minutes, journey.remainingFocusMinutes)
-        journey.segmentMinutes = m
+        let progressMinutes = TimeMapping.progressMinutes(
+            forTimer: minutes,
+            remaining: journey.remainingFocusMinutes
+        )
+        journey.segmentMinutes = journey.remainingFocusMinutes < TimeMapping.minimumTimerMinutes
+            ? TimeMapping.minimumTimerMinutes
+            : progressMinutes
+        journey.segmentProgressMinutes = progressMinutes
         journey.segmentStartAt = Date()
         clearAwayState()
         startLiveActivity(for: journey)
@@ -66,9 +72,10 @@ final class FlightEngine {
 
     func handleScenePhase(_ phase: ScenePhase, context: ModelContext) {
         switch phase {
-        case .background:
+        case .inactive, .background:
             guard hasActiveSegment(context) else { return }
-            if !defaults.bool(forKey: lockedKey) {
+            if !defaults.bool(forKey: lockedKey),
+               defaults.object(forKey: awayStartKey) == nil {
                 defaults.set(Date().timeIntervalSince1970, forKey: awayStartKey)
             }
         case .active:
@@ -139,24 +146,26 @@ final class FlightEngine {
         let profile = fetchProfile(context)
         let cabinBefore = profile?.cabin ?? .economy
 
-        let segMin = journey.segmentMinutes
-        journey.completedFocusMinutes += segMin
+        let timerMin = journey.segmentMinutes
+        let progressMin = journey.effectiveSegmentProgressMinutes
+        journey.completedFocusMinutes += progressMin
         let isFinal = journey.completedFocusMinutes >= journey.focusMinutes
         let kmDelta: Int
         if isFinal {
             kmDelta = journey.totalKm - journey.creditedKm
         } else {
-            kmDelta = Int((Double(journey.totalKm) * Double(segMin) / Double(journey.focusMinutes)).rounded())
+            kmDelta = Int((Double(journey.totalKm) * Double(progressMin) / Double(journey.focusMinutes)).rounded())
         }
         journey.creditedKm += kmDelta
         journey.segmentStartAt = nil
         journey.segmentMinutes = 0
+        journey.segmentProgressMinutes = 0
 
         profile?.totalKm += kmDelta
-        profile?.totalFocusMinutes += segMin
+        profile?.totalFocusMinutes += timerMin
 
         if isFinal {
-            finalizeArrival(journey, kmDelta: kmDelta, segMin: segMin,
+            finalizeArrival(journey, kmDelta: kmDelta, segMin: timerMin,
                             cabinBefore: cabinBefore, profile: profile, context: context)
         } else {
             endLiveActivity()
@@ -165,7 +174,7 @@ final class FlightEngine {
                 destIata: journey.destIata,
                 destCity: AirportStore.shared[journey.destIata]?.displayCity ?? journey.destIata,
                 creditedKmDelta: kmDelta,
-                focusMinutesDelta: segMin,
+                focusMinutesDelta: timerMin,
                 isNewCity: false, isNewCountry: false,
                 cabinBefore: cabinBefore,
                 cabinAfter: profile?.cabin ?? cabinBefore,
@@ -230,6 +239,7 @@ final class FlightEngine {
         let cabin = profile?.cabin ?? .economy
         journey.segmentStartAt = nil
         journey.segmentMinutes = 0
+        journey.segmentProgressMinutes = 0
 
         let isRelayJourney = TimeMapping.isRelayEligible(focusMinutes: journey.focusMinutes)
         let destIata = journey.destIata
@@ -348,7 +358,7 @@ final class FlightEngine {
     private func scheduleLandingNotification(for journey: ActiveJourney) {
         guard let end = journey.segmentEndAt else { return }
         let content = UNMutableNotificationContent()
-        let isFinal = journey.completedFocusMinutes + journey.segmentMinutes >= journey.focusMinutes
+        let isFinal = journey.completedFocusMinutes + journey.effectiveSegmentProgressMinutes >= journey.focusMinutes
         let destCity = AirportStore.shared[journey.destIata]?.displayCity ?? journey.destIata
         content.title = isFinal ? "已抵达 \(destCity)" : "本段飞行完成"
         content.body = isFinal ? "航班 \(journey.flightNumber) 平稳落地，回来点亮城市、领取里程。"

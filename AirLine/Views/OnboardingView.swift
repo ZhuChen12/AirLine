@@ -50,7 +50,7 @@ struct OnboardingView: View {
                                             .frame(width: 52, alignment: .leading)
                                         VStack(alignment: .leading) {
                                             Text(airport.displayCity).foregroundStyle(Theme.textPrimary)
-                                            Text("\(airport.name) · \(airport.country)")
+                                            Text("\(airport.name) · \(airport.displayCountry)")
                                                 .font(.caption2).foregroundStyle(Theme.textSecondary)
                                                 .lineLimit(1)
                                         }
@@ -74,8 +74,12 @@ struct OnboardingView: View {
                 Button {
                     guard let home = selected else { return }
                     let trimmed = name.trimmingCharacters(in: .whitespaces)
-                    context.insert(PlayerProfile(name: trimmed.isEmpty ? "TRAVELER" : trimmed,
-                                                 homeIata: home.icaoKey))
+                    let profile = PlayerProfile(
+                        name: trimmed.isEmpty ? "TRAVELER" : trimmed,
+                        homeIata: home.icaoKey
+                    )
+                    context.insert(profile)
+                    InitialCityLighting.ensureHomeCity(for: profile, context: context)
                     try? context.save()
                 } label: {
                     Text("办理入会")

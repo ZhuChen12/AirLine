@@ -1,12 +1,31 @@
 import Foundation
 import SwiftUI
 
-/// 自绘矢量世界地图的基础几何：等距圆柱投影，基准空间 720×360（2px/度）
+/// 自绘矢量世界地图的基础几何：裁切极区的紧凑 Miller 圆柱投影，基准空间 720×360。
 enum MapRenderer {
     static let baseSize = CGSize(width: 720, height: 360)
+    private static let minVisibleLatitude = -60.0
+    private static let maxVisibleLatitude = 82.0
+    private static let millerWeight = 0.68
+    private static let millerTop = millerY(for: maxVisibleLatitude)
+    private static let millerBottom = millerY(for: minVisibleLatitude)
 
     static func basePoint(lat: Double, lon: Double) -> CGPoint {
-        CGPoint(x: (lon + 180) * 2, y: (90 - lat) * 2)
+        let clampedLat = min(max(lat, minVisibleLatitude), maxVisibleLatitude)
+        let projectedY = millerY(for: clampedLat)
+        let millerNormalized = (millerTop - projectedY) / (millerTop - millerBottom)
+        let linearNormalized = (maxVisibleLatitude - clampedLat) / (maxVisibleLatitude - minVisibleLatitude)
+        let normalizedY = millerNormalized * millerWeight
+            + linearNormalized * (1 - millerWeight)
+        return CGPoint(
+            x: (lon + 180) / 360 * baseSize.width,
+            y: normalizedY * baseSize.height
+        )
+    }
+
+    private static func millerY(for latitude: Double) -> Double {
+        let radians = latitude * .pi / 180
+        return 1.25 * log(tan(.pi / 4 + 0.4 * radians))
     }
 
     /// 构建期打包的陆地轮廓（world_land.min.json → 单个 Path，只构建一次）
@@ -19,6 +38,7 @@ enum MapRenderer {
         var path = Path()
         for ring in rings {
             guard ring.count > 2 else { continue }
+            guard !ring.allSatisfy({ $0[1] < minVisibleLatitude }) else { continue }
             path.move(to: basePoint(lat: ring[0][1], lon: ring[0][0]))
             for pt in ring.dropFirst() {
                 path.addLine(to: basePoint(lat: pt[1], lon: pt[0]))

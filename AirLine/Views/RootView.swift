@@ -19,6 +19,10 @@ struct RootView: View {
 
             if let profile = profiles.first {
                 MainTabs(profile: profile)
+                    .task(id: profile.homeIata) {
+                        InitialCityLighting.ensureHomeCity(for: profile, context: context)
+                        try? context.save()
+                    }
                 if let journey = flyingJourney {
                     FocusFlightView(journey: journey)
                         .zIndex(5)
@@ -75,7 +79,7 @@ private struct MainTabs: View {
 
     var body: some View {
         TabView(selection: $selection) {
-            MapTabView()
+            MapTabView(profile: profile, isActive: selection == 0)
                 .tabItem { Label("地图", systemImage: "globe.asia.australia.fill") }
                 .tag(0)
             FlyHomeView(profile: profile)
