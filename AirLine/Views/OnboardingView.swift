@@ -15,10 +15,7 @@ struct OnboardingView: View {
             Theme.bg.ignoresSafeArea()
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("AIRLINE")
-                        .font(.system(size: 34, weight: .black, design: .serif))
-                        .foregroundStyle(Theme.glow)
-                        .kerning(6)
+                    AirLineBrandLockup()
                     Text("每一次专注，都是一段真实的飞行。")
                         .font(.subheadline)
                         .foregroundStyle(Theme.textSecondary)

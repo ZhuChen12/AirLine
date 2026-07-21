@@ -8,6 +8,7 @@ struct MeView: View {
     @Query private var visits: [CityVisit]
     @Query(sort: \PassportStamp.stampedAt, order: .reverse) private var stamps: [PassportStamp]
     @State private var selectedRecord: FlightRecord?
+    @State private var showCabinRules = false
 
     private var completedCount: Int { records.filter { $0.status == .completed }.count }
 
@@ -41,30 +42,52 @@ struct MeView: View {
             .presentationDetents([.medium, .large])
             .presentationBackground(Theme.bgElevated)
         }
+        .sheet(isPresented: $showCabinRules) {
+            CabinRulesView(totalKm: profile.totalKm)
+        }
     }
 
     private var memberCard: some View {
         let cabin = profile.cabin
-        return HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(profile.name.uppercased())
-                    .font(.title3.bold())
-                    .foregroundStyle(Theme.textPrimary)
-                Text("AIRLINE 常旅客 · 入会于 \(profile.createdAt.formatted(.dateTime.year().month()))")
-                    .font(.caption2)
-                    .foregroundStyle(Theme.textSecondary)
+        return VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                AirLineLogoMark()
+                    .frame(width: 44, height: 44)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(profile.name.uppercased())
+                        .font(.title3.bold())
+                        .foregroundStyle(Theme.textPrimary)
+                    Text("AIRLINE 常旅客 · 入会于 \(profile.createdAt.formatted(.dateTime.year().month()))")
+                        .font(.caption2)
+                        .foregroundStyle(Theme.textSecondary)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(cabin.nameZh)
+                        .font(.subheadline.bold())
+                        .foregroundStyle(Theme.cabinColor(cabin))
+                    Text(cabin.code)
+                        .font(.system(.caption, design: .monospaced).bold())
+                        .padding(.horizontal, 8).padding(.vertical, 2)
+                        .background(Theme.cabinColor(cabin).opacity(0.15), in: Capsule())
+                        .foregroundStyle(Theme.cabinColor(cabin))
+                }
             }
-            Spacer()
-            VStack(alignment: .trailing, spacing: 4) {
-                Text(cabin.nameZh)
-                    .font(.subheadline.bold())
-                    .foregroundStyle(Theme.cabinColor(cabin))
-                Text(cabin.code)
-                    .font(.system(.caption, design: .monospaced).bold())
-                    .padding(.horizontal, 8).padding(.vertical, 2)
-                    .background(Theme.cabinColor(cabin).opacity(0.15), in: Capsule())
-                    .foregroundStyle(Theme.cabinColor(cabin))
+            Divider().overlay(Theme.landStroke)
+            Button {
+                showCabinRules = true
+            } label: {
+                HStack {
+                    Label("等级规则与升级权益", systemImage: "list.star")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                }
+                .font(.caption)
+                .foregroundStyle(Theme.textPrimary)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
         }
         .padding(18)
         .background(

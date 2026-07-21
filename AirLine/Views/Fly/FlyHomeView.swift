@@ -9,13 +9,12 @@ struct FlyHomeView: View {
     @State private var showBoard = false
     @State private var showAbandonConfirm = false
     @State private var showSegmentPicker = false
+    @State private var showCabinRules = false
 
     private var journey: ActiveJourney? { journeys.first }
     private var currentAirport: Airport? { AirportStore.shared[profile.currentIata] }
     private var hasUnlockedRoutes: Bool {
-        let cabin = profile.cabin
-        return AirportStore.shared.routes(from: profile.currentIata)
-            .contains { CabinClass.required(forRouteKm: $0.edge.km) <= cabin }
+        !AirportStore.shared.routes(from: profile.currentIata).isEmpty
     }
 
     var body: some View {
@@ -55,6 +54,9 @@ struct FlyHomeView: View {
                     .presentationDetents([.medium])
                     .presentationBackground(Theme.bgElevated)
             }
+        }
+        .sheet(isPresented: $showCabinRules) {
+            CabinRulesView(totalKm: profile.totalKm)
         }
         .confirmationDialog("确认返航？", isPresented: $showAbandonConfirm, titleVisibility: .visible) {
             Button("放弃旅程并返航", role: .destructive) {
@@ -118,6 +120,23 @@ struct FlyHomeView: View {
                     .font(.caption2)
                     .foregroundStyle(Theme.textSecondary)
             }
+            Divider()
+                .overlay(Theme.landStroke)
+                .padding(.top, 2)
+            Button {
+                showCabinRules = true
+            } label: {
+                HStack {
+                    Label("查看升级规则与权益", systemImage: "list.star")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                }
+                .font(.caption)
+                .foregroundStyle(Theme.textPrimary)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
         }
         .padding(16)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))

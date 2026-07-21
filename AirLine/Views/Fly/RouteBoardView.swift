@@ -7,9 +7,11 @@ struct RouteCandidate: Identifiable {
     let dest: Airport
     let focusMinutes: Int
     let requiredCabin: CabinClass
+    let isBaseRoute: Bool
     let visited: Bool
 
     var id: String { dest.icaoKey }
+    var hubRouteCount: Int { dest.routes.count }
     var relayEligible: Bool { TimeMapping.isRelayEligible(focusMinutes: focusMinutes) }
     func isLocked(for cabin: CabinClass) -> Bool { requiredCabin > cabin }
 }
@@ -44,24 +46,42 @@ struct RouteBoardView: View {
     private var candidates: [RouteCandidate] {
         let visitedSet = Set(visits.map(\.iata))
         let cabin = profile.cabin
-        var items: [RouteCandidate] = AirportStore.shared
-            .routes(from: profile.currentIata)
-            .map { edge, dest in
-                RouteCandidate(edge: edge, dest: dest,
-                               focusMinutes: TimeMapping.focusMinutes(forRealMinutes: edge.realMinutes),
-                               requiredCabin: CabinClass.required(forRouteKm: edge.km),
-                               visited: visitedSet.contains(dest.icaoKey))
+        let routes = AirportStore.shared.routes(from: profile.currentIata)
+        // 防止小机场被高等级枢纽包围：每个出发地至少保留 6 条基础航路。
+        let baseRouteIatas = Set(routes
+            .sorted {
+                if $0.dest.routes.count != $1.dest.routes.count {
+                    return $0.dest.routes.count < $1.dest.routes.count
+                }
+                return $0.edge.km < $1.edge.km
             }
-        // 未点亮优先，其次按距离；锁定卡自然混排（SPEC §4）
+            .prefix(6)
+            .map { $0.dest.icaoKey })
+        var items: [RouteCandidate] = routes
+            .map { edge, dest in
+                let isBase = baseRouteIatas.contains(dest.icaoKey)
+                    || dest.icaoKey == profile.homeIata
+                return RouteCandidate(
+                    edge: edge,
+                    dest: dest,
+                    focusMinutes: TimeMapping.focusMinutes(forRealMinutes: edge.realMinutes),
+                    requiredCabin: isBase
+                        ? .economy
+                        : CabinClass.required(forHubRouteCount: dest.routes.count),
+                    isBaseRoute: isBase,
+                    visited: visitedSet.contains(dest.icaoKey)
+                )
+            }
+        // 未点亮优先，其次按距离；锁定枢纽穿插展示升级方向。
         items.sort {
             if $0.visited != $1.visited { return !$0.visited }
             return $0.edge.km < $1.edge.km
         }
-        let unlocked = items.filter { !$0.isLocked(for: cabin) }.prefix(60)
-        let locked = items.filter { $0.isLocked(for: cabin) }.prefix(3)
-        var merged = Array(unlocked)
+        let unlocked = items.filter { !$0.isLocked(for: cabin) }
+        let locked = items.filter { $0.isLocked(for: cabin) }.prefix(12)
+        var merged = unlocked
         for (i, card) in locked.enumerated() {
-            merged.insert(card, at: min(merged.count, (i + 1) * 5))
+            merged.insert(card, at: min(merged.count, (i + 1) * 7))
         }
         return merged
     }
@@ -71,6 +91,17 @@ struct RouteBoardView: View {
             ZStack {
                 Theme.bg.ignoresSafeArea()
                 VStack(spacing: 0) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
+                            .foregroundStyle(Theme.glow)
+                        Text("航线距离不限 · 升级解锁更多枢纽城市")
+                            .font(.caption)
+                            .foregroundStyle(Theme.textSecondary)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 10)
+
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(DurationFilter.allCases) { f in
@@ -170,6 +201,13 @@ struct RouteCardRow: View {
                             .background(Theme.glow.opacity(0.14), in: Capsule())
                             .foregroundStyle(Theme.glowDim)
                     }
+                    if candidate.isBaseRoute {
+                        Text("基础航路")
+                            .font(.system(size: 9))
+                            .padding(.horizontal, 5).padding(.vertical, 2)
+                            .background(Theme.track.opacity(0.12), in: Capsule())
+                            .foregroundStyle(Theme.track)
+                    }
                     if candidate.relayEligible {
                         Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
                             .font(.system(size: 10))
@@ -184,7 +222,7 @@ struct RouteCardRow: View {
             if locked {
                 VStack(alignment: .trailing, spacing: 3) {
                     Image(systemName: "lock.fill").foregroundStyle(Theme.textSecondary)
-                    Text("\(candidate.requiredCabin.nameZh)解锁")
+                    Text("\(candidate.requiredCabin.nameZh)解锁枢纽")
                         .font(.system(size: 9))
                         .foregroundStyle(Theme.textSecondary)
                 }
@@ -271,7 +309,7 @@ struct CheckInSheet: View {
                     if relayAvailable {
                         segmentPicker
                     } else if relayLockedByCabin {
-                        Text("此航线需要接力飞行 · 优选经济（累计 5,000 km）解锁")
+                        Text("本航线可一次坐完；累计 5,000 km 后可拆分为多段接力")
                             .font(.footnote)
                             .foregroundStyle(Theme.textSecondary)
                     }
@@ -290,9 +328,9 @@ struct CheckInSheet: View {
         HStack {
             Image(systemName: "lock.fill")
             VStack(alignment: .leading, spacing: 3) {
-                Text("\(candidate.requiredCabin.nameZh)可解锁本航线")
+                Text("\(candidate.requiredCabin.nameZh)可解锁 \(candidate.dest.displayCity)")
                     .font(.subheadline.bold())
-                Text("还需 \(max(0, candidate.requiredCabin.thresholdKm - profile.totalKm)) km 里程")
+                Text("该机场连接 \(candidate.hubRouteCount) 座城市 · 还需 \(max(0, candidate.requiredCabin.thresholdKm - profile.totalKm)) km")
                     .font(.caption)
                     .foregroundStyle(Theme.textSecondary)
             }

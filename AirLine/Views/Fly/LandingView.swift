@@ -60,7 +60,7 @@ struct LandingView: View {
                 banner("护照新增一枚国家印章", icon: "stamp", color: Theme.track)
             }
             if outcome.cabinAfter > outcome.cabinBefore {
-                banner("升舱！\(outcome.cabinBefore.nameZh) → \(outcome.cabinAfter.nameZh)",
+                banner("升舱至\(outcome.cabinAfter.nameZh) · 解锁\(outcome.cabinAfter.hubAccessName)",
                        icon: "arrow.up.circle.fill", color: Theme.cabinColor(outcome.cabinAfter))
             }
 
@@ -117,7 +117,7 @@ struct LandingView: View {
                 chip("+\(TimeMapping.formatMinutes(outcome.focusMinutesDelta)) 专注", icon: "timer")
             }
             if outcome.cabinAfter > outcome.cabinBefore {
-                banner("升舱！\(outcome.cabinBefore.nameZh) → \(outcome.cabinAfter.nameZh)",
+                banner("升舱至\(outcome.cabinAfter.nameZh) · 解锁\(outcome.cabinAfter.hubAccessName)",
                        icon: "arrow.up.circle.fill", color: Theme.cabinColor(outcome.cabinAfter))
             }
         }

@@ -1,22 +1,26 @@
 import Foundation
 
-/// 压缩映射：专注时长 ≈ 真实航程 ÷ 5，吸附友好档位（SPEC §3.1）
+/// 分段压缩映射：让大多数真实航线落在 30–60 分钟的有效专注区间。
 enum TimeMapping {
-    static let slots: [Int] = [15, 20, 25, 30, 35, 40, 45, 50, 60, 75, 90, 120, 150, 180]
+    static let slots: [Int] = [15, 25, 30, 40, 50, 60, 75, 90, 120, 150]
     /// 接力段最短时长
     static let minSegmentMinutes = 25
     /// 压缩后超过此时长的航线可接力
     static let relayThresholdMinutes = 60
 
     static func focusMinutes(forRealMinutes real: Int) -> Int {
-        let raw = Double(real) / 5.0
-        var best = slots[0]
-        var bestDiff = Double.greatestFiniteMagnitude
-        for s in slots {
-            let d = abs(Double(s) - raw)
-            if d < bestDiff { bestDiff = d; best = s }
+        switch max(0, real) {
+        case ...35: return 15
+        case ...75: return 25
+        case ...120: return 30
+        case ...180: return 40
+        case ...270: return 50
+        case ...390: return 60
+        case ...510: return 75
+        case ...660: return 90
+        case ...840: return 120
+        default: return 150
         }
-        return best
     }
 
     static func isRelayEligible(focusMinutes: Int) -> Bool {
