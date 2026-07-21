@@ -1,0 +1,1249 @@
+AirLine/Models/TimeMapping.swift
+  s_b2e81fb908d59e::t_6c436c4b16b670 3,5,12-22 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f04c626661993f0e86712","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":3},{"Single":5},{"Range":[12,22]}]}]}
+SPEC.md
+  s_b2e81fb908d59e::t_5c60dead22a1cc 36-39,45-48,83,136-138,140,142-145,155-156 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f06c726661993f0e86912","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[36,39]},{"Range":[45,48]},{"Single":83},{"Range":[136,138]},{"Single":140},{"Range":[142,145]},{"Range":[155,156]}]}]}
+AirLine/Views/Map/MapTabView.swift
+  s_b2e81fb908d59e::t_6dd2fd8c2813cf 224,226-285,301-304 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f05b926661993f0e86839","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":224},{"Range":[226,285]},{"Range":[301,304]}]}]}
+  s_b2e81fb908d59e::t_a33bf72a185292 3,8,34-35,37,67-71,77-81,87-114,117-119,131-135,152,154,164-223 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f059d26661993f0e8681e","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":3},{"Single":8},{"Range":[34,35]},{"Single":37},{"Range":[67,71]},{"Range":[77,81]},{"Range":[87,114]},{"Range":[117,119]},{"Range":[131,135]},{"Single":152},{"Single":154},{"Range":[164,223]}]}]}
+  s_b2e81fb908d59e::t_787545daab39a0 225
+  s_b2e81fb908d59e::t_d9a36f4762c13b 305-306
+AirLine/Views/OnboardingView.swift
+  s_b2e81fb908d59e::t_3e21d9f06eb534 18 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f057f26661993f0e86802","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":18}]}]}
+AirLine/Views/Fly/LandingView.swift
+  s_b2e81fb908d59e::t_175bb540056ec5 63,120 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f061926661993f0e868c2","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":63},{"Single":120}]}]}
+tools/generate_app_icon.swift
+  s_b2e81fb908d59e::t_c71b6ebe03ee10 1-4,19-65,68,71-77 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f054126661993f0e867ba","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[1,4]},{"Range":[19,65]},{"Single":68},{"Range":[71,77]}]}]}
+  s_b2e81fb908d59e::t_6f81a0985c93e1 5-13,16,69-70 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f056f26661993f0e867ea","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[5,13]},{"Single":16},{"Range":[69,70]}]}]}
+  s_b2e81fb908d59e::t_df21bdf1c0cc2c 14-15,17-18,66-67 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f055826661993f0e867d2","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[14,15]},{"Range":[17,18]},{"Range":[66,67]}]}]}
+README.md
+  s_b2e81fb908d59e::t_1d324147d441c9 39,42 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f06f826661993f0e86927","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":39},{"Single":42}]}]}
+AirLine/Assets.xcassets/AppIcon.appiconset/Contents.json
+  s_b2e81fb908d59e::t_20efb555056d2c 1-14 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f052d26661993f0e86781","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[1,14]}]}]}
+AirLine/Assets.xcassets/Contents.json
+  s_b2e81fb908d59e::t_1148f870f4cd81 1-6 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f053726661993f0e867a0","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[1,6]}]}]}
+AirLine/Views/Me/MeView.swift
+  s_b2e81fb908d59e::t_a960da91ea5acd 11,45-47,52-74,76-88,90 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f060926661993f0e868a8","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":11},{"Range":[45,47]},{"Range":[52,74]},{"Range":[76,88]},{"Single":90}]}]}
+AirLine/Models/CabinClass.swift
+  s_b2e81fb908d59e::t_18b95fd7939165 3,17-18,22-23,25-28,47,53-83,90-92 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f04b726661993f0e866fa","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":3},{"Range":[17,18]},{"Range":[22,23]},{"Range":[25,28]},{"Single":47},{"Range":[53,83]},{"Range":[90,92]}]}]}
+AirLine/Views/Fly/RouteBoardView.swift
+  s_b2e81fb908d59e::t_6efa43ae327b65 59,64-73 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f050e26661993f0e8674e","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":59},{"Range":[64,73]}]}]}
+  s_b2e81fb908d59e::t_d8f91a62744373 10,14,49-58,60,62-63,75,80-82,84,94-104,225,312,331,333 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f04fa26661993f0e86733","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":10},{"Single":14},{"Range":[49,58]},{"Single":60},{"Range":[62,63]},{"Single":75},{"Range":[80,82]},{"Single":84},{"Range":[94,104]},{"Single":225},{"Single":312},{"Single":331},{"Single":333}]}]}
+  s_b2e81fb908d59e::t_998a58d1f6019d 204-210 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f070c26661993f0e86939","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[204,210]}]}]}
+AirLine/Views/Fly/FlyHomeView.swift
+  s_b2e81fb908d59e::t_afde6d6e5abe85 12,17,58-60,123-139 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f05fd26661993f0e8688d","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Single":12},{"Single":17},{"Range":[58,60]},{"Range":[123,139]}]}]}
+AirLine/Views/Me/CabinRulesView.swift
+  s_b2e81fb908d59e::t_0c9530b07a36c0 1-144 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f05ca26661993f0e86854","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[1,144]}]}]}
+AirLine/Support/BrandMark.swift
+  s_b2e81fb908d59e::t_28d88654be06de 1-102 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a5f051826661993f0e86769","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[1,102]}]}]}
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9ff6f20b50a4d7312b11d195a73108acceb0856e",
+  "prompts": {},
+  "sessions": {
+    "s_b2e81fb908d59e": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a5eed6a26661993f0e855e9",
+        "model": "gpt-5.6-sol__max"
+      },
+      "human_author": "ByteDance <zhusholiday@gmail.com>"
+    }
+  },
+  "attestation_metadata": {
+    "AirLine/Assets.xcassets/AppIcon.appiconset/Contents.json": [
+      {
+        "hash": "s_b2e81fb908d59e::t_20efb555056d2c",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              14
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f052d26661993f0e86781",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  1,
+                  14
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Assets.xcassets/Contents.json": [
+      {
+        "hash": "s_b2e81fb908d59e::t_1148f870f4cd81",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              6
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f053726661993f0e867a0",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  1,
+                  6
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Models/CabinClass.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_18b95fd7939165",
+        "line_ranges": [
+          {
+            "Single": 3
+          },
+          {
+            "Range": [
+              17,
+              18
+            ]
+          },
+          {
+            "Range": [
+              22,
+              23
+            ]
+          },
+          {
+            "Range": [
+              25,
+              28
+            ]
+          },
+          {
+            "Single": 47
+          },
+          {
+            "Range": [
+              53,
+              83
+            ]
+          },
+          {
+            "Range": [
+              90,
+              92
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f04b726661993f0e866fa",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 3
+              },
+              {
+                "Range": [
+                  17,
+                  18
+                ]
+              },
+              {
+                "Range": [
+                  22,
+                  23
+                ]
+              },
+              {
+                "Range": [
+                  25,
+                  28
+                ]
+              },
+              {
+                "Single": 47
+              },
+              {
+                "Range": [
+                  53,
+                  83
+                ]
+              },
+              {
+                "Range": [
+                  90,
+                  92
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Models/TimeMapping.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_6c436c4b16b670",
+        "line_ranges": [
+          {
+            "Single": 3
+          },
+          {
+            "Single": 5
+          },
+          {
+            "Range": [
+              12,
+              22
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f04c626661993f0e86712",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 3
+              },
+              {
+                "Single": 5
+              },
+              {
+                "Range": [
+                  12,
+                  22
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Support/BrandMark.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_28d88654be06de",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              102
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f051826661993f0e86769",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  1,
+                  102
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Views/Fly/FlyHomeView.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_afde6d6e5abe85",
+        "line_ranges": [
+          {
+            "Single": 12
+          },
+          {
+            "Single": 17
+          },
+          {
+            "Range": [
+              58,
+              60
+            ]
+          },
+          {
+            "Range": [
+              123,
+              139
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f05fd26661993f0e8688d",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 12
+              },
+              {
+                "Single": 17
+              },
+              {
+                "Range": [
+                  58,
+                  60
+                ]
+              },
+              {
+                "Range": [
+                  123,
+                  139
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Views/Fly/LandingView.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_175bb540056ec5",
+        "line_ranges": [
+          {
+            "Single": 63
+          },
+          {
+            "Single": 120
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f061926661993f0e868c2",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 63
+              },
+              {
+                "Single": 120
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Views/Fly/RouteBoardView.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_6efa43ae327b65",
+        "line_ranges": [
+          {
+            "Single": 59
+          },
+          {
+            "Range": [
+              64,
+              73
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f050e26661993f0e8674e",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 59
+              },
+              {
+                "Range": [
+                  64,
+                  73
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_b2e81fb908d59e::t_d8f91a62744373",
+        "line_ranges": [
+          {
+            "Single": 10
+          },
+          {
+            "Single": 14
+          },
+          {
+            "Range": [
+              49,
+              58
+            ]
+          },
+          {
+            "Single": 60
+          },
+          {
+            "Range": [
+              62,
+              63
+            ]
+          },
+          {
+            "Single": 75
+          },
+          {
+            "Range": [
+              80,
+              82
+            ]
+          },
+          {
+            "Single": 84
+          },
+          {
+            "Range": [
+              94,
+              104
+            ]
+          },
+          {
+            "Single": 225
+          },
+          {
+            "Single": 312
+          },
+          {
+            "Single": 331
+          },
+          {
+            "Single": 333
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f04fa26661993f0e86733",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 10
+              },
+              {
+                "Single": 14
+              },
+              {
+                "Range": [
+                  49,
+                  58
+                ]
+              },
+              {
+                "Single": 60
+              },
+              {
+                "Range": [
+                  62,
+                  63
+                ]
+              },
+              {
+                "Single": 75
+              },
+              {
+                "Range": [
+                  80,
+                  82
+                ]
+              },
+              {
+                "Single": 84
+              },
+              {
+                "Range": [
+                  94,
+                  104
+                ]
+              },
+              {
+                "Single": 225
+              },
+              {
+                "Single": 312
+              },
+              {
+                "Single": 331
+              },
+              {
+                "Single": 333
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_b2e81fb908d59e::t_998a58d1f6019d",
+        "line_ranges": [
+          {
+            "Range": [
+              204,
+              210
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f070c26661993f0e86939",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  204,
+                  210
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Views/Map/MapTabView.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_6dd2fd8c2813cf",
+        "line_ranges": [
+          {
+            "Single": 224
+          },
+          {
+            "Range": [
+              226,
+              285
+            ]
+          },
+          {
+            "Range": [
+              301,
+              304
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f05b926661993f0e86839",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 224
+              },
+              {
+                "Range": [
+                  226,
+                  285
+                ]
+              },
+              {
+                "Range": [
+                  301,
+                  304
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_b2e81fb908d59e::t_a33bf72a185292",
+        "line_ranges": [
+          {
+            "Single": 3
+          },
+          {
+            "Single": 8
+          },
+          {
+            "Range": [
+              34,
+              35
+            ]
+          },
+          {
+            "Single": 37
+          },
+          {
+            "Range": [
+              67,
+              71
+            ]
+          },
+          {
+            "Range": [
+              77,
+              81
+            ]
+          },
+          {
+            "Range": [
+              87,
+              114
+            ]
+          },
+          {
+            "Range": [
+              117,
+              119
+            ]
+          },
+          {
+            "Range": [
+              131,
+              135
+            ]
+          },
+          {
+            "Single": 152
+          },
+          {
+            "Single": 154
+          },
+          {
+            "Range": [
+              164,
+              223
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f059d26661993f0e8681e",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 3
+              },
+              {
+                "Single": 8
+              },
+              {
+                "Range": [
+                  34,
+                  35
+                ]
+              },
+              {
+                "Single": 37
+              },
+              {
+                "Range": [
+                  67,
+                  71
+                ]
+              },
+              {
+                "Range": [
+                  77,
+                  81
+                ]
+              },
+              {
+                "Range": [
+                  87,
+                  114
+                ]
+              },
+              {
+                "Range": [
+                  117,
+                  119
+                ]
+              },
+              {
+                "Range": [
+                  131,
+                  135
+                ]
+              },
+              {
+                "Single": 152
+              },
+              {
+                "Single": 154
+              },
+              {
+                "Range": [
+                  164,
+                  223
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Views/Me/CabinRulesView.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_0c9530b07a36c0",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              144
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f05ca26661993f0e86854",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  1,
+                  144
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Views/Me/MeView.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_a960da91ea5acd",
+        "line_ranges": [
+          {
+            "Single": 11
+          },
+          {
+            "Range": [
+              45,
+              47
+            ]
+          },
+          {
+            "Range": [
+              52,
+              74
+            ]
+          },
+          {
+            "Range": [
+              76,
+              88
+            ]
+          },
+          {
+            "Single": 90
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f060926661993f0e868a8",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 11
+              },
+              {
+                "Range": [
+                  45,
+                  47
+                ]
+              },
+              {
+                "Range": [
+                  52,
+                  74
+                ]
+              },
+              {
+                "Range": [
+                  76,
+                  88
+                ]
+              },
+              {
+                "Single": 90
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "AirLine/Views/OnboardingView.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_3e21d9f06eb534",
+        "line_ranges": [
+          {
+            "Single": 18
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f057f26661993f0e86802",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 18
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "README.md": [
+      {
+        "hash": "s_b2e81fb908d59e::t_1d324147d441c9",
+        "line_ranges": [
+          {
+            "Single": 39
+          },
+          {
+            "Single": 42
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f06f826661993f0e86927",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Single": 39
+              },
+              {
+                "Single": 42
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "SPEC.md": [
+      {
+        "hash": "s_b2e81fb908d59e::t_5c60dead22a1cc",
+        "line_ranges": [
+          {
+            "Range": [
+              36,
+              39
+            ]
+          },
+          {
+            "Range": [
+              45,
+              48
+            ]
+          },
+          {
+            "Single": 83
+          },
+          {
+            "Range": [
+              136,
+              138
+            ]
+          },
+          {
+            "Single": 140
+          },
+          {
+            "Range": [
+              142,
+              145
+            ]
+          },
+          {
+            "Range": [
+              155,
+              156
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f06c726661993f0e86912",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  36,
+                  39
+                ]
+              },
+              {
+                "Range": [
+                  45,
+                  48
+                ]
+              },
+              {
+                "Single": 83
+              },
+              {
+                "Range": [
+                  136,
+                  138
+                ]
+              },
+              {
+                "Single": 140
+              },
+              {
+                "Range": [
+                  142,
+                  145
+                ]
+              },
+              {
+                "Range": [
+                  155,
+                  156
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools/generate_app_icon.swift": [
+      {
+        "hash": "s_b2e81fb908d59e::t_c71b6ebe03ee10",
+        "line_ranges": [
+          {
+            "Range": [
+              1,
+              4
+            ]
+          },
+          {
+            "Range": [
+              19,
+              65
+            ]
+          },
+          {
+            "Single": 68
+          },
+          {
+            "Range": [
+              71,
+              77
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f054126661993f0e867ba",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  1,
+                  4
+                ]
+              },
+              {
+                "Range": [
+                  19,
+                  65
+                ]
+              },
+              {
+                "Single": 68
+              },
+              {
+                "Range": [
+                  71,
+                  77
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_b2e81fb908d59e::t_6f81a0985c93e1",
+        "line_ranges": [
+          {
+            "Range": [
+              5,
+              13
+            ]
+          },
+          {
+            "Single": 16
+          },
+          {
+            "Range": [
+              69,
+              70
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f056f26661993f0e867ea",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  5,
+                  13
+                ]
+              },
+              {
+                "Single": 16
+              },
+              {
+                "Range": [
+                  69,
+                  70
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "hash": "s_b2e81fb908d59e::t_df21bdf1c0cc2c",
+        "line_ranges": [
+          {
+            "Range": [
+              14,
+              15
+            ]
+          },
+          {
+            "Range": [
+              17,
+              18
+            ]
+          },
+          {
+            "Range": [
+              66,
+              67
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a5f055826661993f0e867d2",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  14,
+                  15
+                ]
+              },
+              {
+                "Range": [
+                  17,
+                  18
+                ]
+              },
+              {
+                "Range": [
+                  66,
+                  67
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "remote_transcripts": {
+    "s_b2e81fb908d59e": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_0c9530b07a36c0": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_1148f870f4cd81": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_175bb540056ec5": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_18b95fd7939165": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_1d324147d441c9": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_20efb555056d2c": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_28d88654be06de": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_3e21d9f06eb534": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_5c60dead22a1cc": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_6c436c4b16b670": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_6dd2fd8c2813cf": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_6efa43ae327b65": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_6f81a0985c93e1": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_998a58d1f6019d": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_a33bf72a185292": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_a960da91ea5acd": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_afde6d6e5abe85": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_c71b6ebe03ee10": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_d8f91a62744373": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_b2e81fb908d59e::t_df21bdf1c0cc2c": {
+      "tool": "trae",
+      "conversation_id": "6a5eed6a26661993f0e855e9",
+      "session_id": "6a5eed6a26661993f0e855e9",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    }
+  }
+}
