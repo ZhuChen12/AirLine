@@ -46,7 +46,8 @@ final class FlightEngine {
         let carrierName = AirportStore.shared.carrierNames[carrierCode] ?? carrierCode
         let journey = ActiveJourney(origin: origin, dest: dest, edge: edge,
                                     carrierCode: carrierCode, carrierName: carrierName,
-                                    cabin: profile.cabin)
+                                    cabin: profile.cabin,
+                                    isDeveloper: profile.isDeveloper)
         journey.relayMode = relayMode
         context.insert(journey)
         startSegment(journey, minutes: segmentMinutes)
@@ -63,6 +64,7 @@ final class FlightEngine {
             ? TimeMapping.minimumTimerMinutes
             : progressMinutes
         journey.segmentProgressMinutes = progressMinutes
+        journey.segmentTimerSeconds = journey.isDeveloper ? 2 : 0
         journey.segmentStartAt = Date()
         clearAwayState()
         startLiveActivity(for: journey)
@@ -106,7 +108,7 @@ final class FlightEngine {
             clearAwayState()
             return
         }
-        let end = start.addingTimeInterval(TimeInterval(journey.segmentMinutes * 60))
+        let end = start.addingTimeInterval(TimeInterval(journey.segmentDurationSeconds))
         let now = Date()
 
         // 破戒时刻 = 离开时刻 + 宽限。锁屏不记离开时间，不受影响。
@@ -127,7 +129,7 @@ final class FlightEngine {
     /// 冷启动恢复：若存在进行中的段
     func recoverOnLaunch(context: ModelContext) {
         guard let journey = activeJourney(context), let start = journey.segmentStartAt else { return }
-        let end = start.addingTimeInterval(TimeInterval(journey.segmentMinutes * 60))
+        let end = start.addingTimeInterval(TimeInterval(journey.segmentDurationSeconds))
         if Date() >= end {
             completeDueSegment(context: context)
         } else {
@@ -141,7 +143,7 @@ final class FlightEngine {
     /// 段时间到：入账并推进（若整程完成则落地）
     func completeDueSegment(context: ModelContext) {
         guard let journey = activeJourney(context), let start = journey.segmentStartAt else { return }
-        let end = start.addingTimeInterval(TimeInterval(journey.segmentMinutes * 60))
+        let end = start.addingTimeInterval(TimeInterval(journey.segmentDurationSeconds))
         guard Date() >= end else { return }
 
         let profile = fetchProfile(context)
@@ -161,6 +163,7 @@ final class FlightEngine {
         journey.segmentStartAt = nil
         journey.segmentMinutes = 0
         journey.segmentProgressMinutes = 0
+        journey.segmentTimerSeconds = 0
 
         profile?.totalKm += kmDelta
         profile?.totalFocusMinutes += timerMin
@@ -195,20 +198,26 @@ final class FlightEngine {
         var isNewCountry = false
         if let dest = AirportStore.shared[journey.destIata] {
             let destIata = journey.destIata
-            var visitFetch = FetchDescriptor<CityVisit>(predicate: #Predicate { $0.iata == destIata })
+            let isDeveloper = journey.isDeveloper
+            var visitFetch = FetchDescriptor<CityVisit>(
+                predicate: #Predicate { $0.iata == destIata && $0.isDeveloper == isDeveloper }
+            )
             visitFetch.fetchLimit = 1
             if let visit = (try? context.fetch(visitFetch))?.first {
                 visit.arrivalCount += 1
             } else {
-                context.insert(CityVisit(airport: dest, at: now))
+                context.insert(CityVisit(airport: dest, at: now, isDeveloper: isDeveloper))
                 isNewCity = true
             }
             let cc = dest.countryCode
-            var stampFetch = FetchDescriptor<PassportStamp>(predicate: #Predicate { $0.countryCode == cc })
+            var stampFetch = FetchDescriptor<PassportStamp>(
+                predicate: #Predicate { $0.countryCode == cc && $0.isDeveloper == isDeveloper }
+            )
             stampFetch.fetchLimit = 1
             if (try? context.fetch(stampFetch))?.first == nil {
                 context.insert(PassportStamp(countryCode: cc, country: dest.country,
-                                             firstCity: dest.displayCity, stampedAt: now))
+                                             firstCity: dest.displayCity, stampedAt: now,
+                                             isDeveloper: isDeveloper))
                 isNewCountry = true
             }
         }
@@ -241,6 +250,7 @@ final class FlightEngine {
         journey.segmentStartAt = nil
         journey.segmentMinutes = 0
         journey.segmentProgressMinutes = 0
+        journey.segmentTimerSeconds = 0
 
         let isRelayJourney = journey.isRelayJourney
         let destIata = journey.destIata
@@ -290,7 +300,12 @@ final class FlightEngine {
     // MARK: - 查询
 
     func activeJourney(_ context: ModelContext) -> ActiveJourney? {
-        (try? context.fetch(FetchDescriptor<ActiveJourney>()))?.first
+        let isDeveloper = DeveloperAccess.isActive
+        var descriptor = FetchDescriptor<ActiveJourney>(
+            predicate: #Predicate { $0.isDeveloper == isDeveloper }
+        )
+        descriptor.fetchLimit = 1
+        return (try? context.fetch(descriptor))?.first
     }
 
     func hasActiveSegment(_ context: ModelContext) -> Bool {
@@ -298,7 +313,12 @@ final class FlightEngine {
     }
 
     private func fetchProfile(_ context: ModelContext) -> PlayerProfile? {
-        (try? context.fetch(FetchDescriptor<PlayerProfile>()))?.first
+        let isDeveloper = DeveloperAccess.isActive
+        var descriptor = FetchDescriptor<PlayerProfile>(
+            predicate: #Predicate { $0.isDeveloper == isDeveloper }
+        )
+        descriptor.fetchLimit = 1
+        return (try? context.fetch(descriptor))?.first
     }
 
     private func clearAwayState() {
@@ -323,7 +343,7 @@ final class FlightEngine {
             carrierName: journey.carrierName,
             cabinCode: journey.cabin.code
         )
-        let end = start.addingTimeInterval(TimeInterval(journey.segmentMinutes * 60))
+        let end = start.addingTimeInterval(TimeInterval(journey.segmentDurationSeconds))
         let state = FlightActivityAttributes.ContentState(
             segmentStart: start, segmentEnd: end,
             fractionStart: journey.checkpointFraction,

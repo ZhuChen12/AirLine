@@ -13,6 +13,7 @@
 import glob
 import json
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +33,17 @@ with open(os.path.join(ROOT, "tools", "out", "bio_worklist.tsv")) as f:
 
 bios = {}
 dup = []
+
+
+def normalize_city_name(iata, text):
+    city_en = aps[iata]["c"].strip()
+    city_zh = aps[iata]["zh"].strip()
+    if not city_en or not city_zh:
+        return text
+    pattern = rf"(?<![A-Za-z]){re.escape(city_en)}(?![A-Za-z])"
+    return re.sub(pattern, city_zh, text)
+
+
 for path in sorted(glob.glob(os.path.join(ROOT, "data", "bios", "*.json"))):
     with open(path) as f:
         batch = json.load(f)
@@ -44,7 +56,10 @@ for path in sorted(glob.glob(os.path.join(ROOT, "data", "bios", "*.json"))):
             sys.exit(1)
         if iata in bios:
             dup.append(iata)
-        bios[iata] = {"tag": b["tag"].strip(), "body": b["body"].strip()}
+        bios[iata] = {
+            "tag": normalize_city_name(iata, b["tag"].strip()),
+            "body": normalize_city_name(iata, b["body"].strip()),
+        }
 
 # 种子范文优先级最高（人工校对过的口径）
 seed_path = os.path.join(ROOT, "data", "bios_seed.json")

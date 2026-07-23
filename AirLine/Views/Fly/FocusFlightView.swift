@@ -178,7 +178,7 @@ struct FocusFlightView: View {
 
     private func currentFraction(at date: Date = Date()) -> Double {
         guard let start = journey.segmentStartAt else { return journey.checkpointFraction }
-        let total = TimeInterval(journey.segmentMinutes * 60)
+        let total = TimeInterval(journey.segmentDurationSeconds)
         guard total > 0 else { return journey.checkpointFraction }
         let elapsed = min(max(date.timeIntervalSince(start), 0), total)
         let segSpan = journey.segmentEndFraction - journey.checkpointFraction

@@ -44,6 +44,7 @@ enum DemoSeeder {
 
     private static func seedHistory(_ context: ModelContext) {
         guard let profile = (try? context.fetch(FetchDescriptor<PlayerProfile>()))?.first else { return }
+        let isDeveloper = profile.isDeveloper
         let legs = [("PVG", "NRT"), ("NRT", "SIN"), ("SIN", "LHR")]
         let store = AirportStore.shared
         var when = Date().addingTimeInterval(-6 * 86_400)
@@ -66,7 +67,8 @@ enum DemoSeeder {
                                                         carrierCodes: edge.carrierCodes),
                                         carrierCode: carrier,
                                         carrierName: store.carrierNames[carrier] ?? carrier,
-                                        cabin: profile.cabin)
+                                        cabin: profile.cabin,
+                                        isDeveloper: isDeveloper)
             journey.completedFocusMinutes = journey.focusMinutes
             journey.creditedKm = journey.totalKm
             journey.checkInAt = when
@@ -76,17 +78,22 @@ enum DemoSeeder {
             context.insert(record)
 
             let iata = dest.icaoKey
-            var visitFetch = FetchDescriptor<CityVisit>(predicate: #Predicate { $0.iata == iata })
+            var visitFetch = FetchDescriptor<CityVisit>(
+                predicate: #Predicate { $0.iata == iata && $0.isDeveloper == isDeveloper }
+            )
             visitFetch.fetchLimit = 1
             if (try? context.fetch(visitFetch))?.first == nil {
-                context.insert(CityVisit(airport: dest, at: when))
+                context.insert(CityVisit(airport: dest, at: when, isDeveloper: isDeveloper))
             }
             let cc = dest.countryCode
-            var stampFetch = FetchDescriptor<PassportStamp>(predicate: #Predicate { $0.countryCode == cc })
+            var stampFetch = FetchDescriptor<PassportStamp>(
+                predicate: #Predicate { $0.countryCode == cc && $0.isDeveloper == isDeveloper }
+            )
             stampFetch.fetchLimit = 1
             if (try? context.fetch(stampFetch))?.first == nil {
                 context.insert(PassportStamp(countryCode: cc, country: dest.country,
-                                             firstCity: dest.displayCity, stampedAt: when))
+                                             firstCity: dest.displayCity, stampedAt: when,
+                                             isDeveloper: isDeveloper))
             }
 
             profile.totalKm += journey.totalKm
@@ -117,7 +124,8 @@ enum DemoSeeder {
         let journey = ActiveJourney(origin: origin, dest: dest, edge: edge,
                                     carrierCode: carrier,
                                     carrierName: store.carrierNames[carrier] ?? carrier,
-                                    cabin: profile.cabin)
+                                    cabin: profile.cabin,
+                                    isDeveloper: profile.isDeveloper)
         journey.relayMode = true
         if ProcessInfo.processInfo.arguments.contains("--demo-final-relay") {
             journey.completedFocusMinutes = max(0, journey.focusMinutes - 5)
@@ -138,7 +146,7 @@ enum DemoSeeder {
             FlightEngine.shared.startSegment(journey, minutes: segMinutes)
             if landing {
                 journey.segmentStartAt = Date().addingTimeInterval(
-                    -TimeInterval(journey.segmentMinutes * 60 + 2)
+                    -TimeInterval(journey.segmentDurationSeconds + 2)
                 )
             }
         } else if let (edge, dest) = store.routes(from: profile.currentIata)
@@ -148,14 +156,15 @@ enum DemoSeeder {
             let journey = ActiveJourney(origin: origin, dest: dest, edge: edge,
                                         carrierCode: carrier,
                                         carrierName: store.carrierNames[carrier] ?? carrier,
-                                        cabin: profile.cabin)
+                                        cabin: profile.cabin,
+                                        isDeveloper: profile.isDeveloper)
             // --demo-landing: 让末段快速到期，直接看点亮结算
             if landing { journey.completedFocusMinutes = journey.focusMinutes - 1 }
             context.insert(journey)
             FlightEngine.shared.startSegment(journey, minutes: segMinutes)
             if landing {
                 journey.segmentStartAt = Date().addingTimeInterval(
-                    -TimeInterval(journey.segmentMinutes * 60 + 2)
+                    -TimeInterval(journey.segmentDurationSeconds + 2)
                 )
             }
         }

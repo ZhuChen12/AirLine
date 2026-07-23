@@ -50,8 +50,12 @@ struct RouteBoardView: View {
     @State private var selected: RouteCandidate?
     @State private var searchText = ""
 
+    private var scopedVisits: [CityVisit] {
+        visits.filter { $0.isDeveloper == profile.isDeveloper }
+    }
+
     private var directCandidates: [RouteCandidate] {
-        let visitedSet = Set(visits.map(\.iata))
+        let visitedSet = Set(scopedVisits.map(\.iata))
         let routes = AirportStore.shared.routes(from: profile.currentIata)
         // 防止小机场被高等级枢纽包围：每个出发地至少保留 6 条基础航路。
         let baseRouteIatas = Set(routes
@@ -289,10 +293,11 @@ private struct UnavailableDestinationRow: View {
     let isCurrent: Bool
 
     var body: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 12) {
             RoundedRectangle(cornerRadius: 2)
                 .fill(Theme.textSecondary.opacity(0.3))
-                .frame(width: 4, height: 46)
+                .frame(width: 4, height: 52)
+            CityLandmarkThumbnail(iata: airport.icaoKey, isDimmed: true)
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
                     Text(airport.displayCity)
@@ -328,10 +333,15 @@ struct RouteCardRow: View {
     private var accent: Color { Theme.cabinColor(candidate.requiredCabin) }
 
     var body: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 12) {
             RoundedRectangle(cornerRadius: 2)
                 .fill(locked ? Theme.textSecondary.opacity(0.4) : accent)
-                .frame(width: 4, height: 46)
+                .frame(width: 4, height: 52)
+
+            CityLandmarkThumbnail(
+                iata: candidate.dest.icaoKey,
+                isDimmed: locked || relayLocked
+            )
 
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
@@ -348,13 +358,6 @@ struct RouteCardRow: View {
                             .background(Theme.glow.opacity(0.14), in: Capsule())
                             .foregroundStyle(Theme.glowDim)
                     }
-                    if candidate.isBaseRoute {
-                        Text("基础航路")
-                            .font(.system(size: 9))
-                            .padding(.horizontal, 5).padding(.vertical, 2)
-                            .background(Theme.track.opacity(0.12), in: Capsule())
-                            .foregroundStyle(Theme.track)
-                    }
                     if candidate.relayCapable {
                         Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
                             .font(.system(size: 10))
@@ -364,6 +367,8 @@ struct RouteCardRow: View {
                 Text("\(candidate.dest.displayCountry) · \(candidate.edge.km) km · 航程 \(TimeMapping.formatMinutes(candidate.edge.realMinutes))")
                     .font(.caption2)
                     .foregroundStyle(Theme.textSecondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
             }
             Spacer()
             if locked {
@@ -393,6 +398,37 @@ struct RouteCardRow: View {
         .padding(14)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
         .opacity(locked || relayLocked ? 0.62 : 1)
+    }
+}
+
+private struct CityLandmarkThumbnail: View {
+    let iata: String
+    var isDimmed = false
+
+    private var image: UIImage? {
+        CitySceneryService.shared.image(for: iata)
+    }
+
+    var body: some View {
+        if let image {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 76, height: 54)
+                .clipped()
+                .saturation(isDimmed ? 0.25 : 0.9)
+                .brightness(isDimmed ? -0.08 : 0)
+                .overlay {
+                    LinearGradient(
+                        colors: [.clear, Theme.bg.opacity(0.18)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
     }
 }
 

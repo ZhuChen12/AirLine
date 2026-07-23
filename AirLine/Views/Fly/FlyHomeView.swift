@@ -10,8 +10,11 @@ struct FlyHomeView: View {
     @State private var showAbandonConfirm = false
     @State private var showSegmentPicker = false
     @State private var showCabinRules = false
+    private let sceneryService = CitySceneryService.shared
 
-    private var journey: ActiveJourney? { journeys.first }
+    private var journey: ActiveJourney? {
+        journeys.first { $0.isDeveloper == profile.isDeveloper }
+    }
     private var currentAirport: Airport? { AirportStore.shared[profile.currentIata] }
     private var hasUnlockedRoutes: Bool {
         !AirportStore.shared.routes(from: profile.currentIata).isEmpty
@@ -19,8 +22,16 @@ struct FlyHomeView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
+            ZStack(alignment: .top) {
                 Theme.bg.ignoresSafeArea()
+                if let currentAirport,
+                   let image = sceneryService.image(for: currentAirport.icaoKey) {
+                    CitySceneryBackdrop(
+                        image: image
+                    )
+                    .frame(height: 390)
+                    .ignoresSafeArea(edges: .top)
+                }
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         locationHeader
@@ -100,6 +111,7 @@ struct FlyHomeView: View {
                 .foregroundStyle(Theme.textSecondary)
         }
         .padding(.top, 8)
+        .shadow(color: Theme.bg.opacity(0.9), radius: 8, y: 2)
     }
 
     private var cabinCard: some View {
@@ -254,6 +266,41 @@ struct FlyHomeView: View {
         }
         .padding(16)
         .background(Theme.card.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+private struct CitySceneryBackdrop: View {
+    let image: UIImage
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .clipped()
+                    .saturation(0.82)
+                    .contrast(1.02)
+                    .brightness(-0.05)
+
+                Color(hex: 0x07101F)
+                    .opacity(0.30)
+
+                LinearGradient(
+                    stops: [
+                        .init(color: Theme.bg.opacity(0.08), location: 0),
+                        .init(color: Theme.bg.opacity(0.28), location: 0.34),
+                        .init(color: Theme.bg.opacity(0.86), location: 0.76),
+                        .init(color: Theme.bg, location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

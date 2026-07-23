@@ -8,18 +8,27 @@ struct RootView: View {
     @Query private var profiles: [PlayerProfile]
     @Query private var journeys: [ActiveJourney]
     @State private var engine = FlightEngine.shared
+    @State private var developerModeRefresh = false
 
     private var flyingJourney: ActiveJourney? {
-        journeys.first(where: { $0.segmentStartAt != nil })
+        guard let profile = activeProfile else { return nil }
+        return journeys.first {
+            $0.isDeveloper == profile.isDeveloper && $0.segmentStartAt != nil
+        }
+    }
+
+    private var activeProfile: PlayerProfile? {
+        _ = developerModeRefresh
+        return DeveloperAccess.selectedProfile(from: profiles)
     }
 
     var body: some View {
         ZStack {
             Theme.bg.ignoresSafeArea()
 
-            if let profile = profiles.first {
-                MainTabs(profile: profile)
-                    .task(id: profile.homeIata) {
+            if let profile = activeProfile {
+                MainTabs(profile: profile, onDeveloperModeChanged: refreshDeveloperMode)
+                    .task(id: "\(profile.isDeveloper)-\(profile.homeIata)") {
                         InitialCityLighting.ensureHomeCity(for: profile, context: context)
                         try? context.save()
                     }
@@ -28,7 +37,9 @@ struct RootView: View {
                         .zIndex(5)
                 }
             } else {
-                OnboardingView()
+                OnboardingView {
+                    developerModeRefresh.toggle()
+                }
             }
 
             if let outcome = engine.pendingOutcome {
@@ -62,10 +73,16 @@ struct RootView: View {
             engine.handleDeviceUnlocked(isAppActive: scenePhase == .active)
         }
     }
+
+    private func refreshDeveloperMode() {
+        developerModeRefresh.toggle()
+    }
 }
 
 private struct MainTabs: View {
     let profile: PlayerProfile
+    var onDeveloperModeChanged: () -> Void
+
     @State private var selection = MainTabs.initialTab
 
     private static var initialTab: Int {
@@ -85,7 +102,7 @@ private struct MainTabs: View {
             FlyHomeView(profile: profile)
                 .tabItem { Label("飞行", systemImage: "airplane") }
                 .tag(1)
-            MeView(profile: profile)
+            MeView(profile: profile, onDeveloperModeChanged: onDeveloperModeChanged)
                 .tabItem { Label("我的", systemImage: "person.text.rectangle") }
                 .tag(2)
         }

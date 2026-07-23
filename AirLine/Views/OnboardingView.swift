@@ -3,10 +3,15 @@ import SwiftUI
 
 /// 首次启动：乘客姓名 + 主场机场（SPEC §3.3）
 struct OnboardingView: View {
+    var onDeveloperModeChanged: () -> Void = {}
+
     @Environment(\.modelContext) private var context
     @State private var name = ""
     @State private var search = ""
     @State private var selected: Airport?
+    @State private var developerPassphrase = ""
+    @State private var showDeveloperUnlock = false
+    @State private var developerUnlockFailed = false
 
     private var results: [Airport] { AirportStore.shared.search(search, limit: 20) }
 
@@ -16,6 +21,11 @@ struct OnboardingView: View {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 6) {
                     AirLineBrandLockup()
+                        .onTapGesture(count: 5) {
+                            developerPassphrase = ""
+                            developerUnlockFailed = false
+                            showDeveloperUnlock = true
+                        }
                     Text("每一次专注，都是一段真实的飞行。")
                         .font(.subheadline)
                         .foregroundStyle(Theme.textSecondary)
@@ -95,5 +105,71 @@ struct OnboardingView: View {
             }
             .padding(.horizontal, 24)
         }
+        .sheet(isPresented: $showDeveloperUnlock) {
+            DeveloperUnlockSheet(
+                passphrase: $developerPassphrase,
+                failed: developerUnlockFailed
+            ) {
+                if DeveloperAccess.activate(passphrase: developerPassphrase, context: context) {
+                    showDeveloperUnlock = false
+                    onDeveloperModeChanged()
+                } else {
+                    developerUnlockFailed = true
+                }
+            }
+            .presentationDetents([.height(260)])
+            .presentationBackground(Theme.bgElevated)
+        }
+    }
+}
+
+struct DeveloperUnlockSheet: View {
+    @Binding var passphrase: String
+    let failed: Bool
+    let onConfirm: () -> Void
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("验证身份")
+                    .font(.headline)
+                    .foregroundStyle(Theme.textPrimary)
+                Spacer()
+                Button("取消") { dismiss() }
+                    .font(.caption)
+                    .foregroundStyle(Theme.textSecondary)
+            }
+
+            SecureField("输入密钥", text: $passphrase)
+                .keyboardType(.numberPad)
+                .textContentType(.oneTimeCode)
+                .padding(12)
+                .background(Theme.card, in: RoundedRectangle(cornerRadius: 10))
+
+            if failed {
+                Text("密钥错误")
+                    .font(.caption)
+                    .foregroundStyle(Theme.danger)
+            } else {
+                Text("开发者模式仅用于本机测试。")
+                    .font(.caption)
+                    .foregroundStyle(Theme.textSecondary)
+            }
+
+            Button {
+                onConfirm()
+            } label: {
+                Text("进入开发者模式")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 13)
+                    .background(Theme.glow, in: RoundedRectangle(cornerRadius: 12))
+                    .foregroundStyle(Theme.bg)
+            }
+        }
+        .padding(20)
+        .background(Theme.bgElevated)
     }
 }

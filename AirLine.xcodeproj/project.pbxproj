@@ -12,6 +12,7 @@
 		19E0F1FB32597DBE4CBBAA78 /* Generators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC52771DABA85CF2CD39467 /* Generators.swift */; };
 		204A2BE4AB23D1711990686F /* MapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EDF365E2189BA0EC46EC94B /* MapRenderer.swift */; };
 		211DCE7D3CECA3B53ED1B8DF /* world_land.min.json in Resources */ = {isa = PBXBuildFile; fileRef = 29786D4E6001A4D65E899002 /* world_land.min.json */; };
+		24B6F1A88A724E7E91C6D704 /* CityLandmarks in Resources */ = {isa = PBXBuildFile; fileRef = 14E7BC8947FA43D6A40BD67C /* CityLandmarks */; };
 		2937B5A790105C77086409F2 /* CabinClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89D9D97BFA6E0FD654A81B9 /* CabinClass.swift */; };
 		2A9ADA708CA0122C4C4F76D4 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFA8E0B32DCCB2BB7B3A054 /* Models.swift */; };
 		2F9FCB1136B1C76B98145A1A /* CityBioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61291C33AFF80298BF3C6275 /* CityBioService.swift */; };
@@ -70,6 +71,7 @@
 		07DA7F0B88A54DEE087A299E /* MapTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTabView.swift; sourceTree = "<group>"; };
 		0EDF365E2189BA0EC46EC94B /* MapRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRenderer.swift; sourceTree = "<group>"; };
 		130A3B94C09412DE108A69F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		14E7BC8947FA43D6A40BD67C /* CityLandmarks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CityLandmarks; sourceTree = "<group>"; };
 		1805477F76DF7C60285A99D1 /* BrandMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandMark.swift; sourceTree = "<group>"; };
 		29786D4E6001A4D65E899002 /* world_land.min.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = world_land.min.json; sourceTree = "<group>"; };
 		2F49E7E13937D284D78586FC /* BoardingPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardingPassView.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		B5BFAD9D2DABE3F0CED6CE97 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				14E7BC8947FA43D6A40BD67C /* CityLandmarks */,
 				999C49F1FE1C8BCAFA5FE8E3 /* airports.min.json */,
 				C3D5E28D7512A78BBE5474E9 /* city_bios.json */,
 				29786D4E6001A4D65E899002 /* world_land.min.json */,
@@ -328,6 +331,7 @@
 			files = (
 				9289211B825E1BD7AD14BEF0 /* Assets.xcassets in Resources */,
 				BCAC546A4F50578CD0A080E3 /* airports.min.json in Resources */,
+				24B6F1A88A724E7E91C6D704 /* CityLandmarks in Resources */,
 				9CDECB3CC7937E6EAFF65EF0 /* city_bios.json in Resources */,
 				211DCE7D3CECA3B53ED1B8DF /* world_land.min.json in Resources */,
 			);

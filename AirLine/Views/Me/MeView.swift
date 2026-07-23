@@ -4,13 +4,30 @@ import SwiftUI
 /// 我的：统计总览 + 飞行日志 + 护照（SPEC §10）
 struct MeView: View {
     let profile: PlayerProfile
+    var onDeveloperModeChanged: () -> Void = {}
+
+    @Environment(\.modelContext) private var context
     @Query(sort: \FlightRecord.endedAt, order: .reverse) private var records: [FlightRecord]
     @Query private var visits: [CityVisit]
     @Query(sort: \PassportStamp.stampedAt, order: .reverse) private var stamps: [PassportStamp]
     @State private var selectedRecord: FlightRecord?
     @State private var showCabinRules = false
+    @State private var developerPassphrase = ""
+    @State private var showDeveloperUnlock = false
+    @State private var developerUnlockFailed = false
 
-    private var completedCount: Int { records.filter { $0.status == .completed }.count }
+    private var scopedRecords: [FlightRecord] {
+        records.filter { $0.isDeveloper == profile.isDeveloper }
+    }
+    private var scopedVisits: [CityVisit] {
+        visits.filter { $0.isDeveloper == profile.isDeveloper }
+    }
+    private var scopedStamps: [PassportStamp] {
+        stamps.filter { $0.isDeveloper == profile.isDeveloper }
+    }
+    private var completedCount: Int {
+        scopedRecords.filter { $0.status == .completed }.count
+    }
 
     var body: some View {
         NavigationStack {
@@ -45,6 +62,21 @@ struct MeView: View {
         .sheet(isPresented: $showCabinRules) {
             CabinRulesView(totalKm: profile.totalKm)
         }
+        .sheet(isPresented: $showDeveloperUnlock) {
+            DeveloperUnlockSheet(
+                passphrase: $developerPassphrase,
+                failed: developerUnlockFailed
+            ) {
+                if DeveloperAccess.activate(passphrase: developerPassphrase, context: context) {
+                    showDeveloperUnlock = false
+                    onDeveloperModeChanged()
+                } else {
+                    developerUnlockFailed = true
+                }
+            }
+            .presentationDetents([.height(260)])
+            .presentationBackground(Theme.bgElevated)
+        }
     }
 
     private var memberCard: some View {
@@ -53,6 +85,9 @@ struct MeView: View {
             HStack(spacing: 12) {
                 AirLineLogoMark()
                     .frame(width: 44, height: 44)
+                    .onTapGesture(count: 5) {
+                        toggleDeveloperMode()
+                    }
                 VStack(alignment: .leading, spacing: 4) {
                     Text(profile.name.uppercased())
                         .font(.title3.bold())
@@ -101,9 +136,9 @@ struct MeView: View {
     private var statsGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
             statCell(value: formatHours(profile.totalFocusMinutes), label: "累计专注")
-            statCell(value: "\(profile.totalKm) km", label: "累计里程")
+            statCell(value: "\(formatKilometers(profile.totalKm)) km", label: "累计里程")
             statCell(value: "\(completedCount)", label: "完成航段")
-            statCell(value: "\(visits.count) 城 · \(stamps.count) 国", label: "点亮足迹")
+            statCell(value: "\(scopedVisits.count) 城 · \(scopedStamps.count) 国", label: "点亮足迹")
         }
     }
 
@@ -128,13 +163,13 @@ struct MeView: View {
             Text("护照")
                 .font(.headline)
                 .foregroundStyle(Theme.textPrimary)
-            if stamps.isEmpty {
+            if scopedStamps.isEmpty {
                 Text("首次落地一个新国家，就会盖下一枚印章。")
                     .font(.caption)
                     .foregroundStyle(Theme.textSecondary)
             } else {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
-                    ForEach(stamps) { stamp in
+                    ForEach(scopedStamps) { stamp in
                         VStack(spacing: 4) {
                             Text(stamp.countryCode)
                                 .font(.system(.headline, design: .monospaced).bold())
@@ -164,12 +199,12 @@ struct MeView: View {
             Text("飞行日志")
                 .font(.headline)
                 .foregroundStyle(Theme.textPrimary)
-            if records.isEmpty {
+            if scopedRecords.isEmpty {
                 Text("还没有飞行记录，去值机你的第一趟航班。")
                     .font(.caption)
                     .foregroundStyle(Theme.textSecondary)
             } else {
-                ForEach(records) { record in
+                ForEach(scopedRecords) { record in
                     Button {
                         selectedRecord = record
                     } label: {
@@ -223,6 +258,21 @@ struct MeView: View {
     private func formatHours(_ minutes: Int) -> String {
         if minutes < 60 { return "\(minutes)m" }
         let h = minutes / 60, m = minutes % 60
-        return m == 0 ? "\(h)h" : "\(h)h\(m)m"
+        return m == 0 ? "\(h)h " : "\(h)h \(m)m"
+    }
+
+    private func formatKilometers(_ kilometers: Int) -> String {
+        kilometers.formatted(.number.grouping(.automatic))
+    }
+
+    private func toggleDeveloperMode() {
+        if profile.isDeveloper {
+            DeveloperAccess.deactivate()
+            onDeveloperModeChanged()
+        } else {
+            developerPassphrase = ""
+            developerUnlockFailed = false
+            showDeveloperUnlock = true
+        }
     }
 }

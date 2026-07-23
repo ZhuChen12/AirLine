@@ -21,11 +21,17 @@ struct MapTabView: View {
     @State private var tappedVisit: CityVisit?
 
     private var currentAirport: Airport? { AirportStore.shared[profile.currentIata] }
+    private var scopedVisits: [CityVisit] {
+        visits.filter { $0.isDeveloper == profile.isDeveloper }
+    }
+    private var scopedCompletedFlights: [FlightRecord] {
+        completedFlights.filter { $0.isDeveloper == profile.isDeveloper }
+    }
 
     private var routePairs: [(String, String)] {
         var seen = Set<String>()
         var pairs: [(String, String)] = []
-        for f in completedFlights {
+        for f in scopedCompletedFlights {
             let key = [f.originIata, f.destIata].sorted().joined(separator: "-")
             if seen.insert(key).inserted {
                 pairs.append((f.originIata, f.destIata))
@@ -74,7 +80,7 @@ struct MapTabView: View {
                                 )
                             )
                         }
-                        for visit in visits {
+                        for visit in scopedVisits {
                             let point = MapRenderer.basePoint(
                                 lat: visit.latitude,
                                 lon: visit.longitude
@@ -149,7 +155,7 @@ struct MapTabView: View {
                     }
                     .padding(.horizontal, 16)
                     Spacer()
-                    if visits.isEmpty {
+                    if scopedVisits.isEmpty {
                         Text("完成第一次飞行，点亮你的第一座城市")
                             .font(.footnote)
                             .foregroundStyle(Theme.textSecondary)
@@ -175,7 +181,7 @@ struct MapTabView: View {
         #if DEBUG
         .onAppear {
             if ProcessInfo.processInfo.arguments.contains("--demo-citycard") {
-                tappedVisit = visits.first
+                tappedVisit = scopedVisits.first
             }
         }
         #endif
@@ -188,9 +194,9 @@ struct MapTabView: View {
                 .foregroundStyle(Theme.textSecondary)
                 .tracking(0.8)
             HStack(spacing: 0) {
-                statCell(value: "\(visits.count)", label: "城市")
+                statCell(value: "\(scopedVisits.count)", label: "城市")
                 statDivider()
-                statCell(value: "\(Set(visits.map(\.countryCode)).count)", label: "国家")
+                statCell(value: "\(Set(scopedVisits.map(\.countryCode)).count)", label: "国家")
                 statDivider()
                 statCell(value: formatKm(profile.totalKm), label: "里程")
             }
@@ -290,7 +296,7 @@ struct MapTabView: View {
     /// 在屏幕坐标中布局城市名，按枢纽连通度优先并剔除相交标签。
     private func cityLabels(in size: CGSize, scale: CGFloat, center: CGPoint,
                             zoom: CGFloat) -> [MapCityLabel] {
-        var sources = visits.map { visit in
+        var sources = scopedVisits.map { visit in
             MapLabelSource(
                 iata: visit.iata,
                 name: visit.displayCity,
@@ -374,7 +380,7 @@ struct MapTabView: View {
     private func nearestVisit(to location: CGPoint, size: CGSize, scale: CGFloat,
                               center: CGPoint) -> CityVisit? {
         var best: (CityVisit, CGFloat)?
-        for v in visits {
+        for v in scopedVisits {
             let base = MapRenderer.basePoint(lat: v.latitude, lon: v.longitude)
             let point = screenPoint(base: base, size: size, scale: scale, center: center)
             let d = hypot(point.x - location.x, point.y - location.y)

@@ -74,7 +74,7 @@ enum CabinClass: Int, CaseIterable, Comparable, Codable {
 
     var hubRuleDescription: String {
         switch self {
-        case .economy: return "开放普通城市，并保证每座机场至少 6 条基础航路"
+        case .economy: return "开放普通城市"
         case .premium: return "开放拥有 40–79 条直飞航线的区域枢纽"
         case .business: return "开放拥有 80–119 条直飞航线的大型国际枢纽"
         case .first: return "开放拥有 120 条以上直飞航线的全球超级枢纽"
